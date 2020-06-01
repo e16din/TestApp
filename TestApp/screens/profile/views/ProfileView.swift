@@ -48,21 +48,31 @@ class ProfileData {
     var editModeEnabled = false
 }
 
+protocol ClickListenerProtocol: class {
+    func onBirthdayPropertyClick()
+    func onSexPropertyClick()
+}
+
 class ProfileView: UIView,
     UITableViewDataSource,
     UITableViewDelegate,
-    TextHeightChangedProtocol {
-
-    var vTableContainer: UITableView!
+    TextChangedProtocol {
 
     var data: ProfileData!
+
+    let PROPERTY_CELL_IDENTIFIER = "cell"
+
+    var vTableContainer: UITableView!
+    var vDatePicker: UIDatePicker!
+
+    var clickListenerDelegate: ClickListenerProtocol?
 
     // Events
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         showView()
-        showTableView()
+        showProfileProperties()
     }
 
     required public init?(coder decoder: NSCoder) {
@@ -74,19 +84,56 @@ class ProfileView: UIView,
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! PropertyViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: PROPERTY_CELL_IDENTIFIER) as! PropertyViewCell
+        cell.selectionStyle = .none
+
 
         updatePropertyCell(cell: cell, indexPath: indexPath)
 
         return cell
     }
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch data.properties[indexPath.row].type {
+        case .Birthday:
+            clickListenerDelegate?.onBirthdayPropertyClick()
+        case .Sex:
+            clickListenerDelegate?.onSexPropertyClick()
+        case .Name, .Surname, .Patronymic:
+            "Set focus to any PropertyViewCell.UITextView"
+        }
+    }
+
     func onTextHeightChanged(cell: PropertyViewCell) {
-        updateTableView()
+        updateProfileProperties()
     }
 
     func onTextChanged(text: String!, rowIndex: Int!) {
-        updateValue(rowIndex: rowIndex, text: text)
+        changePropertyValue(rowIndex: rowIndex, text: text)
+    }
+
+    func onBirthdayPropertyClick() {
+        showBirthdayPicker()
+    }
+
+    @objc func onBirthdayPickerValueChanged() {
+//        changeBirthdayPropertyValue()
+    }
+
+    @objc func onBirthdayPickerCancel() {
+
+    }
+
+    func onSexPropertyClick() {//todo set as listener
+//        showSexPicker()
+    }
+
+    @objc func onSexPickerValueChanged() {
+//        changeBirthdayPropertyValue()
+    }
+
+    @objc func onSexPickerCancel() {
+
     }
 
     // Actions
@@ -95,22 +142,21 @@ class ProfileView: UIView,
         backgroundColor = .white
     }
 
-    func showTableView() {
+    func showProfileProperties() {
         vTableContainer = UITableView()
-        vTableContainer.translatesAutoresizingMaskIntoConstraints = false
         vTableContainer.delegate = self
         vTableContainer.dataSource = self
-        vTableContainer.register(PropertyViewCell.self, forCellReuseIdentifier: "cell")
+        vTableContainer.translatesAutoresizingMaskIntoConstraints = false
+        vTableContainer.register(PropertyViewCell.self, forCellReuseIdentifier: PROPERTY_CELL_IDENTIFIER)
         addSubview(vTableContainer)
 
-        let safeArea: UILayoutGuide = layoutMarginsGuide
         vTableContainer.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
         vTableContainer.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         vTableContainer.topAnchor.constraint(equalTo: topAnchor).isActive = true
         vTableContainer.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
     }
 
-    func updateTableView() {
+    func updateProfileProperties() {
         vTableContainer.beginUpdates()
         vTableContainer.endUpdates()
     }
@@ -118,12 +164,63 @@ class ProfileView: UIView,
     func updatePropertyCell(cell: PropertyViewCell, indexPath: IndexPath) {
         cell.cellDelegate = self
         cell.rowIndex = indexPath.row
-        cell.isEditable = data.editModeEnabled
 
         let property = data.properties[indexPath.row]
 
+        if property.type == .Sex || property.type == .Birthday {
+            cell.isEditableProperty = false
+        } else {
+            cell.isEditableProperty = data.editModeEnabled
+        }
+
         cell.updatePropertyView(values: makeDataForCell(property: property))
     }
+
+    func showBirthdayPicker() {
+        vDatePicker = UIDatePicker()
+        vDatePicker.translatesAutoresizingMaskIntoConstraints = false
+
+        vDatePicker.datePickerMode = .date
+        vDatePicker.addTarget(self, action: #selector(onBirthdayPickerValueChanged), for: .valueChanged)
+        vDatePicker.addTarget(self, action: #selector(onBirthdayPickerCancel), for: .touchUpOutside)
+
+        addSubview(vDatePicker)
+
+        vDatePicker.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        vDatePicker.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        vDatePicker.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        vDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+    }
+
+//    func showDatePicker(){ // todo
+//        //Formate Date
+//
+//
+//        //ToolBar
+//        let toolbar = UIToolbar();
+//        toolbar.sizeToFit()
+//        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(donedatePicker));
+//        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+//        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelDatePicker));
+//
+//        toolbar.setItems([doneButton,spaceButton,cancelButton], animated: false)
+//
+//        txtDatePicker.inputAccessoryView = toolbar
+//        txtDatePicker.inputView = datePicker
+//
+//    }
+//
+//    @objc func cancelDatePicker(){
+//        self.view.endEditing(true)
+//    }
+
+//    @objc func donedatePicker(){
+//
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "dd/MM/yyyy"
+//        txtDatePicker.text = formatter.string(from: datePicker.date)
+//        self.view.endEditing(true)
+//    }
 
     func makeDataForCell(property: ProfileData.Property) -> (name: String, value: String, isSingleLine: Bool) {
         switch property.type {
@@ -156,8 +253,9 @@ class ProfileView: UIView,
         }
     }
 
-    func updateValue(rowIndex: Int!, text: String!) {
-        var property = data.properties[rowIndex]
+    func changePropertyValue(rowIndex: Int!, text: String!) {
+        let property = data.properties[rowIndex]
+
         switch property.type {
         case .Name, .Surname, .Patronymic:
             data.properties[rowIndex].value = text

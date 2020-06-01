@@ -5,7 +5,7 @@
 
 import UIKit
 
-protocol TextHeightChangedProtocol: class {
+protocol TextChangedProtocol: class {
     func onTextHeightChanged(cell: PropertyViewCell)
     func onTextChanged(text: String!, rowIndex: Int!)
 }
@@ -21,10 +21,10 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
         }
     }
 
-    weak var cellDelegate: TextHeightChangedProtocol?
+    weak var cellDelegate: TextChangedProtocol?
 
     var isSingleLine = false
-    var isEditable = false
+    var isEditableProperty = false
     var rowIndex: Int!
 
     // Events
@@ -39,12 +39,18 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
     }
 
     override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        vPropertyField.becomeFirstResponder()
+        if (isEditableProperty) {
+            vPropertyField.becomeFirstResponder()
+
+        } else {
+            vPropertyField.isUserInteractionEnabled = false
+            super.touchesBegan(touches, with: event)
+        }
     }
 
     public func textViewDidChange(_ textView: UITextView) {
         if !isSingleLine {
-            updateCellHeight(vField: vPropertyField)
+            updateCellHeight()
         }
         cellDelegate!.onTextChanged(text: textView.text, rowIndex: rowIndex)
     }
@@ -101,17 +107,17 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
         contentView.addConstraints([leftConstraint, rightConstraint, topConstraint, bottomConstraint])
     }
 
-    func updateCellHeight(vField: UITextView) {
-        let startHeight = vField.frame.size.height
-        let calcHeight = vField.sizeThatFits(vField.frame.size).height
+    func updateCellHeight() {
+        let startHeight = vPropertyField.frame.size.height
+        let calcHeight = vPropertyField.sizeThatFits(vPropertyField.frame.size).height
         print("startHeight: \(startHeight) | calcHeight: \(calcHeight)")
 
         let delta: CGFloat = 4
         if startHeight + delta < calcHeight || startHeight - delta > calcHeight {
             UIView.setAnimationsEnabled(false)
-            vField.sizeToFit()
-            if vField.frame.size.width < DEFAULT_WIDTH {
-                vField.frame.size.width = DEFAULT_WIDTH
+            vPropertyField.sizeToFit()
+            if vPropertyField.frame.size.width < DEFAULT_WIDTH {
+                vPropertyField.frame.size.width = DEFAULT_WIDTH
             }
 
             cellDelegate!.onTextHeightChanged(cell: self)
@@ -130,10 +136,10 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
 
         } else {
             vPropertyField.textContainer.maximumNumberOfLines = 100
-            updateCellHeight(vField: vPropertyField)
+            updateCellHeight()
         }
 
-        if isEditable {
+        if isEditableProperty {
             vPropertyField.isEditable = true
             vPropertyField.textContainer.lineBreakMode = .byTruncatingHead
 

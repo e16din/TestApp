@@ -18,24 +18,30 @@ class ProfileViewController: UIViewController {
     var screen = ProfileScreen()
 
     var vNavigationBar: UINavigationBar!
+    var vProfileContainer: ProfileView!
 
     // Events
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        loadProfileData()
         showNavigationBar()
         showProfileView()
     }
 
-    @objc func onEditClick() {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loadProfileProperties()
+        updateProfileView()
+    }
+
+    @objc func onActionEditClick() {
         showEditProfileScreen()
     }
 
     // Actions
 
-    func loadProfileData() {
+    func loadProfileProperties() {
         let defaults = UserDefaults.standard
 
         for (index, property) in screen.profileData.properties.enumerated() {
@@ -55,16 +61,20 @@ class ProfileViewController: UIViewController {
         vNavigationBar = navigationController?.navigationBar
         vNavigationBar.topItem?.title = "Просмотр"
 
-        let editItem = UIBarButtonItem(title: "Редактировать", style: .plain, target: self, action: #selector(onEditClick))
+        let editItem = UIBarButtonItem(title: "Редактировать", style: .plain, target: self, action: #selector(onActionEditClick))
         vNavigationBar.topItem?.rightBarButtonItem = editItem
     }
 
     func showProfileView() {
-        let vProfileContainer = ProfileView(frame: UIScreen.main.bounds)
+        vProfileContainer = ProfileView(frame: UIScreen.main.bounds)
         vProfileContainer.data = screen.profileData
-        vProfileContainer.data.editModeEnabled = false
 
         view.addSubview(vProfileContainer)
+    }
+
+    func updateProfileView() {
+        vProfileContainer.removeFromSuperview()
+        showProfileView()
     }
 }
 

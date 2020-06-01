@@ -14,7 +14,6 @@
 		75195C182422419E00BF8E6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75195C172422419E00BF8E6F /* Assets.xcassets */; };
 		75195C23242243EB00BF8E6F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75195C0E2422419C00BF8E6F /* AppDelegate.swift */; };
 		75B5E08C2422690800D76E6C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75B5E08B2422690800D76E6C /* Launch Screen.storyboard */; };
-		75B5E0AE24226B3100D76E6C /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B5E0AD24226B3100D76E6C /* Default.png */; };
 		A0FC91807F6109C63C39AE74 /* Pods_TestApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA855BC29FA758CD958B7BC /* Pods_TestApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -30,7 +29,6 @@
 		75195C172422419E00BF8E6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = TestApp/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		75195C1C2422419E00BF8E6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		75B5E08B2422690800D76E6C /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
-		75B5E0AD24226B3100D76E6C /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../../../../Desktop/Default.png; sourceTree = "<group>"; };
 		BEA855BC29FA758CD958B7BC /* Pods_TestApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TestApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -85,7 +83,6 @@
 		75195C022422419C00BF8E6F = {
 			isa = PBXGroup;
 			children = (
-				75B5E0AD24226B3100D76E6C /* Default.png */,
 				75B5E08B2422690800D76E6C /* Launch Screen.storyboard */,
 				75195C0D2422419C00BF8E6F /* TestApp */,
 				75195C0C2422419C00BF8E6F /* Products */,
@@ -182,7 +179,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75B5E0AE24226B3100D76E6C /* Default.png in Resources */,
 				75B5E08C2422690800D76E6C /* Launch Screen.storyboard in Resources */,
 				75195C182422419E00BF8E6F /* Assets.xcassets in Resources */,
 			);

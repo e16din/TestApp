@@ -12,7 +12,7 @@ class EditProfileScreen {
     var profileData = ProfileData()
 }
 
-class EditProfileViewController: UIViewController {
+class EditProfileViewController: UIViewController, ClickListenerProtocol {
 
     var screen = EditProfileScreen()
 
@@ -26,7 +26,41 @@ class EditProfileViewController: UIViewController {
         showProfileView()
     }
 
-    @objc func onSaveClick() {
+    @objc func onActionSaveClick() {
+        saveProfileProperties()
+        showValidationFailedAlert()
+    }
+
+    func onBirthdayPropertyClick() {
+        print("1")
+    }
+
+    func onSexPropertyClick() {
+        print("2")
+    }
+
+    // Actions
+
+    func showValidationFailedAlert() {
+        let alert = UIAlertController(title: "Ошибка", message: "Все поля, за исключением отчества являются обязательными", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            switch action.style { //todo
+            case .default:
+                print("default")
+
+            case .cancel:
+                print("cancel")
+
+            case .destructive:
+                print("destructive")
+
+
+            }
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    func saveProfileProperties() {
         let defaults = UserDefaults.standard
 
         for property in screen.profileData.properties {
@@ -34,13 +68,11 @@ class EditProfileViewController: UIViewController {
         }
     }
 
-    // Actions
-
     func showNavigationBar() {
         let backButton = UIBarButtonItem()
         backButton.title = "Назад"
         navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action: #selector(onSaveClick))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action: #selector(onActionSaveClick))
         navigationItem.title = "Редактирование"
     }
 
@@ -48,10 +80,8 @@ class EditProfileViewController: UIViewController {
         let vProfileContainer = ProfileView(frame: view.frame)
         vProfileContainer.data = screen.profileData
         vProfileContainer.data.editModeEnabled = true
+        vProfileContainer.clickListenerDelegate = self
 
-        let statusBarHeight = UIApplication.shared.statusBarFrame.height
-        let navBarHeight = (self.navigationController?.navigationBar.intrinsicContentSize.height)!
-        vProfileContainer.layoutMargins.top = statusBarHeight + navBarHeight
         view.addSubview(vProfileContainer)
     }
 }
