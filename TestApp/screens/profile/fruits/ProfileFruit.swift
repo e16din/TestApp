@@ -28,19 +28,21 @@ class ProfileFruit {
         }
 
         var type: PropertyType
-        var value: Any
+        var value: Any?
     }
 
+    static let DEFAULT_NAME = "Иван"
+    static let DEFAULT_SURNAME = "Иванов"
+    static let DEFAULT_PATRONYMIC = "Иванович"
+    static let DEFAULT_BIRTHDAY = "Не указана"
+    static let DEFAULT_SEX = 0
+
     var properties: [Property] = [
-        Property(type: .Name, value: "Иван"),
-        Property(type: .Surname, value: "Иванов"),
-        Property(type: .Patronymic, value: "Иванович"),
-        Property(type: .Birthday, value: {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd.MM.yyyy"
-            return dateFormatter.date(from: "13.05.1992")
-        }()),
-        Property(type: .Sex, value: 1),
+        Property(type: .Name, value: DEFAULT_NAME),
+        Property(type: .Surname, value: DEFAULT_SURNAME),
+        Property(type: .Patronymic, value: DEFAULT_PATRONYMIC),
+        Property(type: .Birthday, value: DEFAULT_BIRTHDAY),
+        Property(type: .Sex, value: DEFAULT_SEX),
     ]
 
     var editModeEnabled = false

@@ -45,7 +45,7 @@ class ProfileViewController: UIViewController {
                     let value: Any? = defaults.value(forKey: property.type.toString())
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "dd.MM.yyyy"
-                    return dateFormatter.date(from: birthdayValue ?? "13.05.1992")
+                    return dateFormatter.date(from: birthdayValue ?? ProfileFruit.DEFAULT_BIRTHDAY)
                 }()
 
             default:

@@ -6,7 +6,6 @@
 import UIKit
 
 
-
 protocol ClickListenerProtocol: class {
     func onBirthdayPropertyClick()
     func onSexPropertyClick()
@@ -113,33 +112,35 @@ class ProfileView: UIView,
     func makeDataForCell(property: ProfileFruit.Property) -> (name: String, value: String, isSingleLine: Bool) {
         switch property.type {
         case .Birthday:
-            let birthdayDate = property.value as! Date
-            let birthdayText = birthdayDate.toString(dateFormat: "dd.MM.yyyy")
+            let birthdayDate = property.value as? Date
+            let birthdayText = birthdayDate?.toString(dateFormat: "dd.MM.yyyy") ?? ProfileFruit.DEFAULT_BIRTHDAY
             return ("Дата Рождения", birthdayText, true)
 
         case .Sex:
-            let sexType = property.value as! Int
+            let sexType = property.value as? Int ?? ProfileFruit.DEFAULT_SEX
             var sexText = ""
 
             switch sexType {
+            case 0:
+                sexText = "Не выбран"
             case 1:
-                sexText = "мужской"
+                sexText = "Мужской"
             case 2:
-                sexText = "женский"
+                sexText = "Женский"
             default:
-                sexText = "не выбран"
+                sexText = "Ошибка"
             }
 
             return ("Пол", sexText, true)
 
         case .Name:
-            return ("Имя", property.value as! String, true)
+            return ("Имя", property.value as? String ?? ProfileFruit.DEFAULT_NAME, true)
 
         case .Surname:
-            return ("Фамилия", property.value as! String, false)
+            return ("Фамилия", property.value as? String ?? ProfileFruit.DEFAULT_SURNAME, false)
 
         case .Patronymic:
-            return ("Отчество", property.value as! String, true)
+            return ("Отчество", property.value as? String ?? ProfileFruit.DEFAULT_PATRONYMIC, true)
         }
     }
 
@@ -151,7 +152,7 @@ class ProfileView: UIView,
             data.properties[rowIndex].value = text
 
         default:
-            print("Do nothing") //todo: remove it
+            "Do nothing"
         }
     }
 
@@ -161,7 +162,7 @@ class ProfileView: UIView,
 }
 
 extension Date {
-    func toString(dateFormat:String) -> String {
+    func toString(dateFormat: String) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = dateFormat
         return dateFormatter.string(from: self)

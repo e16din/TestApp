@@ -55,7 +55,7 @@ class EditProfileViewController: UIViewController, ClickListenerProtocol {
         let vBirthdayValueField = vProfileContainer.getValueFieldView(rowIndex: getBirthdayParameterIndex()).vPropertyField
         vBirthdayValueField?.text = vDatePicker.date.toString(dateFormat: "dd.MM.yyyy")
 
-        updateBirthdayValue(date: vProfileContainer.data.properties[getBirthdayParameterIndex()].value as! Date)
+        updateBirthdayValue(date: vProfileContainer.data.properties[getBirthdayParameterIndex()].value as? Date)
     }
 
     func onSexPropertyClick() {
@@ -89,7 +89,7 @@ class EditProfileViewController: UIViewController, ClickListenerProtocol {
         vDatePicker.backgroundColor = .white
         vDatePicker.datePickerMode = .date
 
-        vDatePicker.date = vProfileContainer.data.properties[getBirthdayParameterIndex()].value as! Date
+        vDatePicker.date = vProfileContainer.data.properties[getBirthdayParameterIndex()].value as? Date ?? Date()
         vDatePicker.maximumDate = Date()
 
         vDatePicker.addTarget(self, action: #selector(onBirthdayPickerValueChanged), for: .valueChanged)
@@ -156,8 +156,8 @@ class EditProfileViewController: UIViewController, ClickListenerProtocol {
         for property in vProfileContainer.data.properties {
             switch property.type {
             case .Birthday:
-                let birthdayDate = property.value as! Date
-                let birthdayText = birthdayDate.toString(dateFormat: "dd.MM.yyyy")
+                let birthdayDate = property.value as? Date
+                let birthdayText = birthdayDate?.toString(dateFormat: "dd.MM.yyyy") ?? ProfileFruit.DEFAULT_BIRTHDAY
                 defaults.set(birthdayText, forKey: property.type.toString())
 
             default:
@@ -184,9 +184,9 @@ class EditProfileViewController: UIViewController, ClickListenerProtocol {
         view.addSubview(vProfileContainer)
     }
 
-    func updateBirthdayValue(date: Date) {
+    func updateBirthdayValue(date: Date?) {
         let vBirthdayValueField = vProfileContainer.getValueFieldView(rowIndex: getBirthdayParameterIndex()).vPropertyField
-        vBirthdayValueField?.text = date.toString(dateFormat: "dd.MM.yyyy")
+        vBirthdayValueField?.text = date?.toString(dateFormat: "dd.MM.yyyy") ??  ProfileFruit.DEFAULT_BIRTHDAY
     }
 
     func hideDatePicker() {
