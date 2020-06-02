@@ -51,10 +51,11 @@ class EditProfileViewController: UIViewController, ClickListenerProtocol {
 
     @objc func onBirthdayPickerCancel() {
         hideDatePicker()
+        updateBirthdayValue(date: vProfileContainer.data.properties[getBirthdayParameterIndex()].value as? Date)
+    }
 
-        let vBirthdayValueField = vProfileContainer.getValueFieldView(rowIndex: getBirthdayParameterIndex()).vPropertyField
-        vBirthdayValueField?.text = vDatePicker.date.toString(dateFormat: "dd.MM.yyyy")
-
+    @objc func onTouchOutsideDatePicker() {
+        hideDatePicker()
         updateBirthdayValue(date: vProfileContainer.data.properties[getBirthdayParameterIndex()].value as? Date)
     }
 
@@ -68,10 +69,6 @@ class EditProfileViewController: UIViewController, ClickListenerProtocol {
 
     @objc func onSexPickerCancel() {//todo
 
-    }
-
-    @objc func onTouchOutsideDatePicker() {
-        hideDatePicker()
     }
 
     // Actions
