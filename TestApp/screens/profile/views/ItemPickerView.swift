@@ -5,59 +5,109 @@
 
 import UIKit
 
-class ItemPickerView : UIView {
+@objc protocol ItemPickerDelegate {
+    func onItemPickerValueChanged(selectedItemPosition: Int)
+    func onItemPickerCancel()
+    func onItemPickerValueSelected(selectedItemPosition: Int)
+    func onTouchOutsideItemPicker()
+}
 
-//    var itemsDictionary : [Int, String] = [:]
-//
-//    var vSexPicker: UIPickerView!
-//
-//    func showSexPicker() {
-//        if vSexPicker != nil && vSexPicker.isDescendant(of: view) {
-//            print("The vSexPicker is always shown")
-//            return
-//        }
-//
-//        // vSexPicker
-//
-//        vSexPicker = UIPickerView()
-//        vSexPicker.translatesAutoresizingMaskIntoConstraints = false
-//        vSexPicker.dataSource = self
-//        vSexPicker.delegate = self
-//        vSexPicker.backgroundColor = .white
-//
-//        view.addSubview(vSexPicker)
-//
-//        vSexPicker.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-//        vSexPicker.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-//        vSexPicker.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-//
-//        // vSexPickerToolBar
-//
-//        vDatePickerToolBar = UIToolbar();
-//        vDatePickerToolBar.translatesAutoresizingMaskIntoConstraints = false
-//
-//        let vDoneButton = UIBarButtonItem(title: "Выбрать", style: .plain, target: self, action: #selector(onBirthdayPickerValueSelected));
-//        let vSpaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-//        let vCancelButton = UIBarButtonItem(title: "Отмена", style: .plain, target: self, action: #selector(onBirthdayPickerCancel));
-//
-//        vDatePickerToolBar.setItems([vDoneButton, vSpaceButton, vCancelButton], animated: false)
-//        view.addSubview(vDatePickerToolBar)
-//
-//        vDatePickerToolBar.bottomAnchor.constraint(equalTo: vDatePicker.topAnchor).isActive = true
-//        vDatePickerToolBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-//        vDatePickerToolBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-//
-//        // vOutsideStub
-//
-//        view.addSubview(vOutsideStub)
-//        vOutsideStub.translatesAutoresizingMaskIntoConstraints = false
-//        let gesture = UITapGestureRecognizer(target: self, action: #selector(self.onTouchOutsideDatePicker))
-//        vOutsideStub.removeGestureRecognizer(<#T##gestureRecognizer: UIGestureRecognizer##UIKit.UIGestureRecognizer#>)
-//        vOutsideStub.addGestureRecognizer(gesture)
-//
-//        vOutsideStub.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-//        vOutsideStub.bottomAnchor.constraint(equalTo: vDatePickerToolBar.topAnchor).isActive = true
-//        vOutsideStub.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-//        vOutsideStub.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-//    }
+class ItemPickerView: UIView,
+    UIPickerViewDataSource,
+    UIPickerViewDelegate {
+
+    var itemsDictionary: [Int: String]!
+
+    var itemPickerDelegate: ItemPickerDelegate!
+
+    var vItemPicker = UIPickerView()
+    let vOutsideStub = UIView()
+    let vToolBar = UIToolbar()
+
+    // Events
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+
+    required public init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
+    func initPicker(items: [Int: String]) {
+        itemsDictionary = items
+
+        showItemPicker()
+        showToolbar()
+        showOutsideStub()
+    }
+
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return itemsDictionary.count
+    }
+
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return itemsDictionary[row]
+    }
+
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        itemPickerDelegate.onItemPickerValueChanged(selectedItemPosition: row)
+    }
+
+    @objc func onItemPickerValueSelected() {
+        itemPickerDelegate.onItemPickerValueSelected(selectedItemPosition: vItemPicker.selectedRow(inComponent: 0))
+    }
+
+    // Actions
+
+    func showItemPicker() {
+        vItemPicker.translatesAutoresizingMaskIntoConstraints = false
+        vItemPicker.dataSource = self
+        vItemPicker.delegate = self
+        vItemPicker.backgroundColor = .white
+
+        addSubview(vItemPicker)
+
+        vItemPicker.translatesAutoresizingMaskIntoConstraints = false
+        vItemPicker.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        vItemPicker.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        vItemPicker.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+    }
+
+    //todo: extract vToolBar and vOutsideStub to base class for pickers
+
+    func showToolbar() {
+        let vDoneButton = UIBarButtonItem(title: "Выбрать", style: .plain, target: self,
+            action: #selector(onItemPickerValueSelected));
+        let vCancelButton = UIBarButtonItem(title: "Отмена", style: .plain, target: itemPickerDelegate,
+            action: #selector(itemPickerDelegate.onItemPickerCancel));
+        let vSpaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+
+        vToolBar.setItems([vDoneButton, vSpaceButton, vCancelButton], animated: false)
+        addSubview(vToolBar)
+
+        vToolBar.translatesAutoresizingMaskIntoConstraints = false
+        vToolBar.bottomAnchor.constraint(equalTo: vItemPicker.topAnchor).isActive = true
+        vToolBar.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        vToolBar.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+    }
+
+    func showOutsideStub() {
+        addSubview(vOutsideStub)
+
+        let gesture = UITapGestureRecognizer(target: itemPickerDelegate,
+            action: #selector(itemPickerDelegate.onTouchOutsideItemPicker))
+        vOutsideStub.addGestureRecognizer(gesture)
+
+        vOutsideStub.translatesAutoresizingMaskIntoConstraints = false
+        vOutsideStub.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        vOutsideStub.bottomAnchor.constraint(equalTo: vToolBar.topAnchor).isActive = true
+        vOutsideStub.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        vOutsideStub.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+    }
+
 }

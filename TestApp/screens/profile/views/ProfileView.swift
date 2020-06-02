@@ -117,8 +117,8 @@ class ProfileView: UIView,
             return ("Дата Рождения", birthdayText, true)
 
         case .Sex:
-            let sexType = property.value as? Int ?? ProfileFruit.DEFAULT_SEX
-            var sexText  = data.sexDictionary[sexType] ?? data.sexDictionary[0]!
+            let sexType = property.value as? Int ?? ProfileFruit.DEFAULT_SEX_TYPE
+            var sexText  = ProfileFruit.SEX_TYPES[sexType] ?? ProfileFruit.SEX_TYPES[0]!
 
             return ("Пол", sexText, true)
 

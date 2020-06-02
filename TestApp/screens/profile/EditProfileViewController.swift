@@ -9,15 +9,18 @@
 import UIKit
 
 
-class EditProfileViewController: UIViewController,
-    ProfileViewProtocol,
-    UIPickerViewDataSource,
-    UIPickerViewDelegate {
+class EditProfileViewController: UIViewController, ProfileViewProtocol {
+
+    var oldValues: [Any]!
 
     var vNavigationBar: UINavigationBar!
     var vProfileContainer: ProfileView!
-    var vBirthdayPicker = DatePickerView(frame: UIScreen.main.bounds)
-    var vSexPicker = ItemPickerView()
+    var vBirthdayPicker: DatePickerView!
+    var vSexPicker: ItemPickerView!
+
+    func getPropertyIndex(propertyType: ProfileFruit.Property.PropertyType) -> Int {
+        vProfileContainer.data.properties.firstIndex(where: { $0.type == propertyType })!
+    }
 
     // Events
 
@@ -40,39 +43,7 @@ class EditProfileViewController: UIViewController,
         showSexPicker()
     }
 
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return vProfileContainer.data.sexDictionary.count
-    }
-
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return vProfileContainer.data.sexDictionary[row]
-    }
-
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-//        typeBarButton.title = array[row]["type1"] as? String
-//        typePickerView.hidden = false
-    }
-
-    @objc func onSexPickerValueChanged() {//todo
-//        changeBirthdayPropertyValue()
-    }
-
-    @objc func onSexPickerCancel() {//todo
-
-    }
-
     // Actions
-
-    func showSexPicker() {
-        if vSexPicker != nil && vSexPicker.isDescendant(of: view) {
-            print("The vDatePicker is always shown")
-            return
-        }
-    }
 
     func showValidationFailedAlert() {
         let alert = UIAlertController(title: "Ошибка", message: "Все поля, за исключением отчества являются обязательными", preferredStyle: .alert)
@@ -126,6 +97,12 @@ class EditProfileViewController: UIViewController,
 
         view.addSubview(vProfileContainer)
     }
+
+    func updatePropertyValue(value: Any, propertyType: ProfileFruit.Property.PropertyType) {
+        let propertyIndex = getPropertyIndex(propertyType: propertyType)
+        vProfileContainer.data.properties[propertyIndex].value = value
+        vProfileContainer.vPropertiesTableContainer.reloadRows(at: [IndexPath(item: propertyIndex, section: 0)], with: .none)
+    }
 }
 
 // Pick Birthday
@@ -134,42 +111,40 @@ extension EditProfileViewController: DatePickerDelegate {
     // Events
 
     func onDatePickerValueChanged(selectedDate: Date) {
-        updateBirthdayValue(date: selectedDate)
+        updatePropertyValue(value: selectedDate, propertyType: .Birthday)
+    }
+
+    func onDatePickerValueSelected(selectedDate: Date) {
+        hideDatePicker()
+        updatePropertyValue(value: selectedDate, propertyType: .Birthday)
     }
 
     func onDatePickerCancel() {
         hideDatePicker()
-        updateBirthdayValue(date: vProfileContainer.data.properties[getBirthdayParameterIndex()].value as? Date)
-    }
 
-    func onDatePickerValueSelected(selectedDate: Date) {
-        let selectedDate = selectedDate
-
-        hideDatePicker()
-
-        let birthdayParameterIndex = getBirthdayParameterIndex()
-        vProfileContainer.data.properties[birthdayParameterIndex].value = selectedDate
-
-        vProfileContainer.vPropertiesTableContainer.reloadRows(at: [IndexPath(item: birthdayParameterIndex, section: 0)], with: .none)
+        let birthdayPropertyIndex = getPropertyIndex(propertyType: .Birthday)
+        let oldBirthdayDate = oldValues[birthdayPropertyIndex]
+        updatePropertyValue(value: oldBirthdayDate, propertyType: .Birthday)
     }
 
     func onTouchOutsideDatePicker() {
-        hideDatePicker()
-        updateBirthdayValue(date: vProfileContainer.data.properties[getBirthdayParameterIndex()].value as? Date)
+        onDatePickerCancel()
     }
 
     // Actions
 
     func showBirthdayPicker() {
-        if vBirthdayPicker.isDescendant(of: view) {
-            print("The vDatePicker is always shown")
+        if vBirthdayPicker != nil && vBirthdayPicker.isDescendant(of: view) {
+            print("The vBirthdayPicker is always shown")
             return
         }
 
+        vBirthdayPicker = DatePickerView()
         vBirthdayPicker.datePickerDelegate = self
-        let birthdayParameterIndex = getBirthdayParameterIndex()
-        let date = vProfileContainer.data.properties[birthdayParameterIndex].value as? Date ?? Date()
-        vBirthdayPicker.show(date: date)
+
+        let birthdayPropertyIndex = getPropertyIndex(propertyType: .Birthday)
+        let date = vProfileContainer.data.properties[birthdayPropertyIndex].value as? Date ?? Date()
+        vBirthdayPicker.initPicker(date: date)
 
         view.addSubview(vBirthdayPicker)
 
@@ -183,13 +158,56 @@ extension EditProfileViewController: DatePickerDelegate {
     func hideDatePicker() {
         vBirthdayPicker.removeFromSuperview()
     }
+}
 
-    func updateBirthdayValue(date: Date?) {
-        let vBirthdayValueField = vProfileContainer.getValueFieldView(rowIndex: getBirthdayParameterIndex()).vPropertyField
-        vBirthdayValueField?.text = date?.toString(dateFormat: "dd.MM.yyyy") ?? ProfileFruit.DEFAULT_BIRTHDAY
+// Pick Sex
+extension EditProfileViewController: ItemPickerDelegate {
+
+    // Events
+
+    func onItemPickerValueChanged(selectedItemPosition: Int) {
+        updatePropertyValue(value: selectedItemPosition, propertyType: .Sex)
     }
 
-    func getBirthdayParameterIndex() -> Int {
-        vProfileContainer.data.properties.firstIndex(where: { $0.type == .Birthday })!
+    func onItemPickerValueSelected(selectedItemPosition: Int) {
+        hideItemPicker()
+        updatePropertyValue(value: selectedItemPosition, propertyType: .Sex)
+    }
+
+    func onItemPickerCancel() {
+        hideItemPicker()
+
+        let sexPropertyIndex = getPropertyIndex(propertyType: .Sex)
+        let oldSexType = oldValues[sexPropertyIndex]
+        updatePropertyValue(value: oldSexType, propertyType: .Sex)
+    }
+
+    func onTouchOutsideItemPicker() {
+        onItemPickerCancel()
+    }
+
+    // Actions
+
+    func showSexPicker() {
+        if vSexPicker != nil && vSexPicker.isDescendant(of: view) {
+            print("The vSexPicker is always shown")
+            return
+        }
+
+        vSexPicker = ItemPickerView()
+        vSexPicker.itemPickerDelegate = self
+        vSexPicker.initPicker(items: ProfileFruit.SEX_TYPES)
+
+        view.addSubview(vSexPicker)
+
+        vSexPicker.translatesAutoresizingMaskIntoConstraints = false
+        vSexPicker.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        vSexPicker.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        vSexPicker.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        vSexPicker.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+    }
+
+    func hideItemPicker() {
+        vSexPicker.removeFromSuperview()
     }
 }

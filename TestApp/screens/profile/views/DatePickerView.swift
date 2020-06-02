@@ -22,12 +22,6 @@ class DatePickerView: UIView {
 
     // Events
 
-    func show(date: Date) {
-        showDatePicker(date: date)
-        showToolbar()
-        showOutsideStub()
-    }
-
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -44,20 +38,29 @@ class DatePickerView: UIView {
         datePickerDelegate.onDatePickerValueChanged(selectedDate: vDatePicker.date)
     }
 
+    func initPicker(date: Date) {
+        showDatePicker(date: date)
+        showToolbar()
+        showOutsideStub()
+    }
+
     // Actions
 
-    func showOutsideStub() {
-        addSubview(vOutsideStub)
+    func showDatePicker(date: Date) {
+        vDatePicker.backgroundColor = .white
+        vDatePicker.datePickerMode = .date
 
-        let gesture = UITapGestureRecognizer(target: datePickerDelegate,
-            action: #selector(datePickerDelegate.onTouchOutsideDatePicker))
-        vOutsideStub.addGestureRecognizer(gesture)
+        vDatePicker.date = date
+        vDatePicker.maximumDate = Date()
 
-        vOutsideStub.translatesAutoresizingMaskIntoConstraints = false
-        vOutsideStub.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        vOutsideStub.bottomAnchor.constraint(equalTo: vToolBar.topAnchor).isActive = true
-        vOutsideStub.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        vOutsideStub.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        vDatePicker.addTarget(self, action: #selector(onDatePickerValueChanged), for: .valueChanged)
+
+        addSubview(vDatePicker)
+
+        vDatePicker.translatesAutoresizingMaskIntoConstraints = false
+        vDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        vDatePicker.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        vDatePicker.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
     }
 
     func showToolbar() {
@@ -76,20 +79,17 @@ class DatePickerView: UIView {
         vToolBar.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
     }
 
-    func showDatePicker(date: Date) {
-        vDatePicker.backgroundColor = .white
-        vDatePicker.datePickerMode = .date
+    func showOutsideStub() {
+        addSubview(vOutsideStub)
 
-        vDatePicker.date = date
-        vDatePicker.maximumDate = Date()
+        let gesture = UITapGestureRecognizer(target: datePickerDelegate,
+            action: #selector(datePickerDelegate.onTouchOutsideDatePicker))
+        vOutsideStub.addGestureRecognizer(gesture)
 
-        vDatePicker.addTarget(self, action: #selector(onDatePickerValueChanged), for: .valueChanged)
-
-        addSubview(vDatePicker)
-
-        vDatePicker.translatesAutoresizingMaskIntoConstraints = false
-        vDatePicker.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        vDatePicker.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        vDatePicker.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        vOutsideStub.translatesAutoresizingMaskIntoConstraints = false
+        vOutsideStub.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        vOutsideStub.bottomAnchor.constraint(equalTo: vToolBar.topAnchor).isActive = true
+        vOutsideStub.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        vOutsideStub.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
     }
 }

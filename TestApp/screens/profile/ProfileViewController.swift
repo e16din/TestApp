@@ -52,12 +52,14 @@ class ProfileViewController: UIViewController {
                 let value: Any? = defaults.value(forKey: property.type.toString())
                 vProfileContainer.data.properties[index].value = value
             }
-
         }
     }
 
     func showEditProfileScreen() {
         let editProfileViewController = EditProfileViewController()
+        editProfileViewController.oldValues = vProfileContainer.data.properties.map({ it in
+            it.value
+        })
         navigationController?.pushViewController(editProfileViewController, animated: true)
     }
 

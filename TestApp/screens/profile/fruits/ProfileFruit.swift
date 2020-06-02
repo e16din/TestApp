@@ -7,6 +7,12 @@ import Foundation
 
 class ProfileFruit {
 
+    static let SEX_TYPES = [
+        0: "Не выбран",
+        1: "Мужской",
+        2: "Женский"
+    ]
+
     struct Property {
         enum PropertyType {
             case Name, Surname, Patronymic, Birthday, Sex
@@ -35,20 +41,14 @@ class ProfileFruit {
     static let DEFAULT_SURNAME = "Иванов"
     static let DEFAULT_PATRONYMIC = "Иванович"
     static let DEFAULT_BIRTHDAY = "Не указана"
-    static let DEFAULT_SEX = 0
-
-    let sexDictionary = [
-        0: "Не выбран",
-        1: "Мужской",
-        2: "Женский"
-    ]
+    static let DEFAULT_SEX_TYPE = 0
 
     var properties: [Property] = [
         Property(type: .Name, value: DEFAULT_NAME),
         Property(type: .Surname, value: DEFAULT_SURNAME),
         Property(type: .Patronymic, value: DEFAULT_PATRONYMIC),
         Property(type: .Birthday, value: DEFAULT_BIRTHDAY),
-        Property(type: .Sex, value: DEFAULT_SEX),
+        Property(type: .Sex, value: DEFAULT_SEX_TYPE),
     ]
 
     var editModeEnabled = false
