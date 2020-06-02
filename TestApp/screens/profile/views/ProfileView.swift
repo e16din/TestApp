@@ -6,7 +6,7 @@
 import UIKit
 
 
-protocol ClickListenerProtocol: class {
+protocol ProfileViewProtocol: class {
     func onBirthdayPropertyClick()
     func onSexPropertyClick()
 }
@@ -22,7 +22,7 @@ class ProfileView: UIView,
 
     var vPropertiesTableContainer: UITableView!
 
-    var clickListenerDelegate: ClickListenerProtocol?
+    var delegate: ProfileViewProtocol?
 
     // Events
     override init(frame: CGRect) {
@@ -53,9 +53,9 @@ class ProfileView: UIView,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch data.properties[indexPath.row].type {
         case .Birthday:
-            clickListenerDelegate?.onBirthdayPropertyClick()
+            delegate?.onBirthdayPropertyClick()
         case .Sex:
-            clickListenerDelegate?.onSexPropertyClick()
+            delegate?.onSexPropertyClick()
         case .Name, .Surname, .Patronymic:
             "Set focus to any PropertyViewCell.UITextView"
         }
@@ -118,18 +118,7 @@ class ProfileView: UIView,
 
         case .Sex:
             let sexType = property.value as? Int ?? ProfileFruit.DEFAULT_SEX
-            var sexText = ""
-
-            switch sexType {
-            case 0:
-                sexText = "Не выбран"
-            case 1:
-                sexText = "Мужской"
-            case 2:
-                sexText = "Женский"
-            default:
-                sexText = "Ошибка"
-            }
+            var sexText  = data.sexDictionary[sexType] ?? data.sexDictionary[0]!
 
             return ("Пол", sexText, true)
 

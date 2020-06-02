@@ -9,13 +9,15 @@
 import UIKit
 
 
-class EditProfileViewController: UIViewController, ClickListenerProtocol {
+class EditProfileViewController: UIViewController,
+    ProfileViewProtocol,
+    UIPickerViewDataSource,
+    UIPickerViewDelegate {
 
     var vNavigationBar: UINavigationBar!
     var vProfileContainer: ProfileView!
-    var vDatePicker: UIDatePicker!
-    var vDatePickerToolBar: UIToolbar!
-    let vOutsideStub = UIView()
+    var vBirthdayPicker = DatePickerView(frame: UIScreen.main.bounds)
+    var vSexPicker = ItemPickerView()
 
     // Events
 
@@ -34,33 +36,25 @@ class EditProfileViewController: UIViewController, ClickListenerProtocol {
         showBirthdayPicker()
     }
 
-    @objc func onBirthdayPickerValueSelected() {
-        let selectedDate = vDatePicker.date
-
-        hideDatePicker()
-
-        let birthdayParameterIndex = getBirthdayParameterIndex()
-        vProfileContainer.data.properties[birthdayParameterIndex].value = selectedDate
-
-        vProfileContainer.vPropertiesTableContainer.reloadRows(at: [IndexPath(item: birthdayParameterIndex, section: 0)], with: .none)
-    }
-
-    @objc func onBirthdayPickerValueChanged() {
-        updateBirthdayValue(date: vDatePicker.date)
-    }
-
-    @objc func onBirthdayPickerCancel() {
-        hideDatePicker()
-        updateBirthdayValue(date: vProfileContainer.data.properties[getBirthdayParameterIndex()].value as? Date)
-    }
-
-    @objc func onTouchOutsideDatePicker() {
-        hideDatePicker()
-        updateBirthdayValue(date: vProfileContainer.data.properties[getBirthdayParameterIndex()].value as? Date)
-    }
-
     func onSexPropertyClick() {
-        print("2")
+        showSexPicker()
+    }
+
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return vProfileContainer.data.sexDictionary.count
+    }
+
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return vProfileContainer.data.sexDictionary[row]
+    }
+
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+//        typeBarButton.title = array[row]["type1"] as? String
+//        typePickerView.hidden = false
     }
 
     @objc func onSexPickerValueChanged() {//todo
@@ -73,59 +67,11 @@ class EditProfileViewController: UIViewController, ClickListenerProtocol {
 
     // Actions
 
-    func showBirthdayPicker() {
-        if vDatePicker != nil && vDatePicker.isDescendant(of: view) {
+    func showSexPicker() {
+        if vSexPicker != nil && vSexPicker.isDescendant(of: view) {
             print("The vDatePicker is always shown")
             return
         }
-
-        // vDatePicker
-
-        vDatePicker = UIDatePicker()
-        vDatePicker.translatesAutoresizingMaskIntoConstraints = false
-        vDatePicker.backgroundColor = .white
-        vDatePicker.datePickerMode = .date
-
-        vDatePicker.date = vProfileContainer.data.properties[getBirthdayParameterIndex()].value as? Date ?? Date()
-        vDatePicker.maximumDate = Date()
-
-        vDatePicker.addTarget(self, action: #selector(onBirthdayPickerValueChanged), for: .valueChanged)
-        vDatePicker.addTarget(self, action: #selector(onBirthdayPickerCancel), for: .touchUpOutside)
-
-        let birthdayParameterIndex = getBirthdayParameterIndex()
-        view.addSubview(vDatePicker)
-
-        vDatePicker.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        vDatePicker.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        vDatePicker.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-
-        // vDatePickerToolBar
-
-        vDatePickerToolBar = UIToolbar();
-        vDatePickerToolBar.translatesAutoresizingMaskIntoConstraints = false
-
-        let vDoneButton = UIBarButtonItem(title: "Выбрать", style: .plain, target: self, action: #selector(onBirthdayPickerValueSelected));
-        let vSpaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        let vCancelButton = UIBarButtonItem(title: "Отмена", style: .plain, target: self, action: #selector(onBirthdayPickerCancel));
-
-        vDatePickerToolBar.setItems([vDoneButton, vSpaceButton, vCancelButton], animated: false)
-        view.addSubview(vDatePickerToolBar)
-
-        vDatePickerToolBar.bottomAnchor.constraint(equalTo: vDatePicker.topAnchor).isActive = true
-        vDatePickerToolBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        vDatePickerToolBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-
-        // vOutsideStub
-
-        view.addSubview(vOutsideStub)
-        vOutsideStub.translatesAutoresizingMaskIntoConstraints = false
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(self.onTouchOutsideDatePicker))
-        vOutsideStub.addGestureRecognizer(gesture)
-
-        vOutsideStub.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        vOutsideStub.bottomAnchor.constraint(equalTo: vDatePickerToolBar.topAnchor).isActive = true
-        vOutsideStub.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        vOutsideStub.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
     }
 
     func showValidationFailedAlert() {
@@ -176,25 +122,74 @@ class EditProfileViewController: UIViewController, ClickListenerProtocol {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         vProfileContainer.data = appDelegate.profileFruit
         vProfileContainer.data.editModeEnabled = true
-        vProfileContainer.clickListenerDelegate = self
+        vProfileContainer.delegate = self
 
         view.addSubview(vProfileContainer)
+    }
+}
+
+// Pick Birthday
+extension EditProfileViewController: DatePickerDelegate {
+
+    // Events
+
+    func onDatePickerValueChanged(selectedDate: Date) {
+        updateBirthdayValue(date: selectedDate)
+    }
+
+    func onDatePickerCancel() {
+        hideDatePicker()
+        updateBirthdayValue(date: vProfileContainer.data.properties[getBirthdayParameterIndex()].value as? Date)
+    }
+
+    func onDatePickerValueSelected(selectedDate: Date) {
+        let selectedDate = selectedDate
+
+        hideDatePicker()
+
+        let birthdayParameterIndex = getBirthdayParameterIndex()
+        vProfileContainer.data.properties[birthdayParameterIndex].value = selectedDate
+
+        vProfileContainer.vPropertiesTableContainer.reloadRows(at: [IndexPath(item: birthdayParameterIndex, section: 0)], with: .none)
+    }
+
+    func onTouchOutsideDatePicker() {
+        hideDatePicker()
+        updateBirthdayValue(date: vProfileContainer.data.properties[getBirthdayParameterIndex()].value as? Date)
+    }
+
+    // Actions
+
+    func showBirthdayPicker() {
+        if vBirthdayPicker.isDescendant(of: view) {
+            print("The vDatePicker is always shown")
+            return
+        }
+
+        vBirthdayPicker.datePickerDelegate = self
+        let birthdayParameterIndex = getBirthdayParameterIndex()
+        let date = vProfileContainer.data.properties[birthdayParameterIndex].value as? Date ?? Date()
+        vBirthdayPicker.show(date: date)
+
+        view.addSubview(vBirthdayPicker)
+
+        vBirthdayPicker.translatesAutoresizingMaskIntoConstraints = false
+        vBirthdayPicker.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        vBirthdayPicker.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        vBirthdayPicker.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        vBirthdayPicker.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+    }
+
+    func hideDatePicker() {
+        vBirthdayPicker.removeFromSuperview()
     }
 
     func updateBirthdayValue(date: Date?) {
         let vBirthdayValueField = vProfileContainer.getValueFieldView(rowIndex: getBirthdayParameterIndex()).vPropertyField
-        vBirthdayValueField?.text = date?.toString(dateFormat: "dd.MM.yyyy") ??  ProfileFruit.DEFAULT_BIRTHDAY
-    }
-
-    func hideDatePicker() {
-        vDatePickerToolBar.removeFromSuperview()
-        vDatePicker.removeFromSuperview()
-        vOutsideStub.removeFromSuperview()
+        vBirthdayValueField?.text = date?.toString(dateFormat: "dd.MM.yyyy") ?? ProfileFruit.DEFAULT_BIRTHDAY
     }
 
     func getBirthdayParameterIndex() -> Int {
         vProfileContainer.data.properties.firstIndex(where: { $0.type == .Birthday })!
     }
 }
-
-

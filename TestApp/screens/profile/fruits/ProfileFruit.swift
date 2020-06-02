@@ -37,6 +37,12 @@ class ProfileFruit {
     static let DEFAULT_BIRTHDAY = "Не указана"
     static let DEFAULT_SEX = 0
 
+    let sexDictionary = [
+        0: "Не выбран",
+        1: "Мужской",
+        2: "Женский"
+    ]
+
     var properties: [Property] = [
         Property(type: .Name, value: DEFAULT_NAME),
         Property(type: .Surname, value: DEFAULT_SURNAME),
