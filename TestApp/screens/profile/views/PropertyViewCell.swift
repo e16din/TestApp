@@ -43,7 +43,6 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
             vPropertyField.becomeFirstResponder()
 
         } else {
-            vPropertyField.isUserInteractionEnabled = false
             super.touchesBegan(touches, with: event)
         }
     }
@@ -135,17 +134,12 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
             vPropertyField.textContainer.maximumNumberOfLines = 1
 
         } else {
-            vPropertyField.textContainer.maximumNumberOfLines = 100
+            vPropertyField.textContainer.maximumNumberOfLines = 30
             updateCellHeight()
         }
 
-        if isEditableProperty {
-            vPropertyField.isEditable = true
-            vPropertyField.textContainer.lineBreakMode = .byTruncatingHead
-
-        } else {
-            vPropertyField.isEditable = false
-            vPropertyField.textContainer.lineBreakMode = .byTruncatingTail
-        }
+        vPropertyField.isEditable = isEditableProperty
+        vPropertyField.isUserInteractionEnabled = isEditableProperty
+        vPropertyField.textContainer.lineBreakMode = isEditableProperty ? .byTruncatingHead : .byTruncatingTail
     }
 }

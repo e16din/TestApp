@@ -8,14 +8,7 @@
 
 import UIKit
 
-
-class ProfileScreen {
-    var profileData = ProfileData()
-}
-
 class ProfileViewController: UIViewController {
-
-    var screen = ProfileScreen()
 
     var vNavigationBar: UINavigationBar!
     var vProfileContainer: ProfileView!
@@ -44,16 +37,27 @@ class ProfileViewController: UIViewController {
     func loadProfileProperties() {
         let defaults = UserDefaults.standard
 
-        for (index, property) in screen.profileData.properties.enumerated() {
-            let value: Any? = defaults.value(forKey: property.type.toString())
-            screen.profileData.properties[index].value = value
+        for (index, property) in vProfileContainer.data.properties.enumerated() {
+            switch property.type {
+            case .Birthday:
+                let birthdayValue: String? = defaults.string(forKey: property.type.toString())
+                vProfileContainer.data.properties[index].value = {
+                    let value: Any? = defaults.value(forKey: property.type.toString())
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd.MM.yyyy"
+                    return dateFormatter.date(from: birthdayValue ?? "13.05.1992")
+                }()
+
+            default:
+                let value: Any? = defaults.value(forKey: property.type.toString())
+                vProfileContainer.data.properties[index].value = value
+            }
+
         }
     }
 
     func showEditProfileScreen() {
         let editProfileViewController = EditProfileViewController()
-        editProfileViewController.screen.profileData = screen.profileData
-
         navigationController?.pushViewController(editProfileViewController, animated: true)
     }
 
@@ -67,7 +71,9 @@ class ProfileViewController: UIViewController {
 
     func showProfileView() {
         vProfileContainer = ProfileView(frame: UIScreen.main.bounds)
-        vProfileContainer.data = screen.profileData
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        vProfileContainer.data = appDelegate.profileFruit
+        vProfileContainer.data.editModeEnabled = false
 
         view.addSubview(vProfileContainer)
     }
