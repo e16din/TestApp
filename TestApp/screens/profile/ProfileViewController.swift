@@ -10,7 +10,8 @@ import UIKit
 
 class ProfileViewController: UIViewController {
 
-    var vNavigationBar: UINavigationBar!
+    let profileFruit = ProfileFruit()
+
     var vProfileContainer: ProfileView!
 
     // Events
@@ -35,14 +36,15 @@ class ProfileViewController: UIViewController {
     // Actions
 
     func loadProfileProperties() {
+        fruits.profile = profileFruit
+
         let defaults = UserDefaults.standard
 
-        for (index, property) in vProfileContainer.data.properties.enumerated() {
+        for (index, property) in fruits.profile.properties.enumerated() {
             switch property.type {
             case .Birthday:
                 let birthdayValue: String? = defaults.string(forKey: property.type.toString())
-                vProfileContainer.data.properties[index].value = {
-                    let value: Any? = defaults.value(forKey: property.type.toString())
+                fruits.profile.properties[index].value = {
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "dd.MM.yyyy"
                     return dateFormatter.date(from: birthdayValue ?? ProfileFruit.DEFAULT_BIRTHDAY)
@@ -50,33 +52,31 @@ class ProfileViewController: UIViewController {
 
             default:
                 let value: Any? = defaults.value(forKey: property.type.toString())
-                vProfileContainer.data.properties[index].value = value
+                fruits.profile.properties[index].value = value
             }
         }
     }
 
     func showEditProfileScreen() {
         let editProfileViewController = EditProfileViewController()
-        editProfileViewController.oldValues = vProfileContainer.data.properties.map({ it in
-            it.value
+        editProfileViewController.oldValues = fruits.profile.properties.map({ it in
+            it.value as Any
         })
         navigationController?.pushViewController(editProfileViewController, animated: true)
     }
 
     func showNavigationBar() {
-        vNavigationBar = navigationController?.navigationBar
-        vNavigationBar.topItem?.title = "Просмотр"
+        if let vNavigationBar = navigationController?.navigationBar {
+            vNavigationBar.topItem?.title = "Просмотр"
 
-        let editItem = UIBarButtonItem(title: "Редактировать", style: .plain, target: self, action: #selector(onActionEditClick))
-        vNavigationBar.topItem?.rightBarButtonItem = editItem
+            let editItem = UIBarButtonItem(title: "Редактировать", style: .plain, target: self, action: #selector(onActionEditClick))
+            vNavigationBar.topItem?.rightBarButtonItem = editItem
+        }
     }
 
     func showProfileView() {
         vProfileContainer = ProfileView(frame: UIScreen.main.bounds)
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        vProfileContainer.data = appDelegate.profileFruit
-        vProfileContainer.data.editModeEnabled = false
-
+        vProfileContainer.editModeEnabled = false
         view.addSubview(vProfileContainer)
     }
 

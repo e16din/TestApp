@@ -9,7 +9,9 @@
 import UIKit
 
 
-class EditProfileViewController: UIViewController, ProfileViewProtocol {
+class EditProfileViewController: UIViewController,
+    ProfileViewProtocol,
+    NavigationViewControllerDelegate {
 
     var oldValues: [Any]!
 
@@ -19,7 +21,7 @@ class EditProfileViewController: UIViewController, ProfileViewProtocol {
     var vSexPicker: ItemPickerView!
 
     func getPropertyIndex(propertyType: ProfileFruit.Property.PropertyType) -> Int {
-        vProfileContainer.data.properties.firstIndex(where: { $0.type == propertyType })!
+        fruits.profile.properties.firstIndex(where: { $0.type == propertyType })!
     }
 
     // Events
@@ -41,6 +43,11 @@ class EditProfileViewController: UIViewController, ProfileViewProtocol {
 
     func onSexPropertyClick() {
         showSexPicker()
+    }
+
+    func onBackButtonPressed() -> Bool {
+        navigationController?.popViewController(animated: true)
+        return true
     }
 
     // Actions
@@ -67,7 +74,7 @@ class EditProfileViewController: UIViewController, ProfileViewProtocol {
     func saveProfileProperties() {
         let defaults = UserDefaults.standard
 
-        for property in vProfileContainer.data.properties {
+        for property in fruits.profile.properties {
             switch property.type {
             case .Birthday:
                 let birthdayDate = property.value as? Date
@@ -86,13 +93,15 @@ class EditProfileViewController: UIViewController, ProfileViewProtocol {
         navigationController?.navigationBar.topItem?.backBarButtonItem = vBackButton
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action: #selector(onActionSaveClick))
         navigationItem.title = "Редактирование"
+
+        (self.navigationController as? NavigationViewController)?.backDelegate = self
+
     }
 
     func showProfileView() {
         vProfileContainer = ProfileView(frame: view.frame)
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        vProfileContainer.data = appDelegate.profileFruit
-        vProfileContainer.data.editModeEnabled = true
+
+        vProfileContainer.editModeEnabled = true
         vProfileContainer.delegate = self
 
         view.addSubview(vProfileContainer)
@@ -100,8 +109,8 @@ class EditProfileViewController: UIViewController, ProfileViewProtocol {
 
     func updatePropertyValue(value: Any, propertyType: ProfileFruit.Property.PropertyType) {
         let propertyIndex = getPropertyIndex(propertyType: propertyType)
-        vProfileContainer.data.properties[propertyIndex].value = value
-        vProfileContainer.vPropertiesTableContainer.reloadRows(at: [IndexPath(item: propertyIndex, section: 0)], with: .none)
+        fruits.profile.properties[propertyIndex].value = value
+        vProfileContainer.updateProperty(index: propertyIndex)
     }
 }
 
@@ -143,7 +152,7 @@ extension EditProfileViewController: DatePickerDelegate {
         vBirthdayPicker.datePickerDelegate = self
 
         let birthdayPropertyIndex = getPropertyIndex(propertyType: .Birthday)
-        let date = vProfileContainer.data.properties[birthdayPropertyIndex].value as? Date ?? Date()
+        let date = fruits.profile.properties[birthdayPropertyIndex].value as? Date ?? Date()
         vBirthdayPicker.initPicker(date: date)
 
         view.addSubview(vBirthdayPicker)

@@ -50,6 +50,4 @@ class ProfileFruit {
         Property(type: .Birthday, value: DEFAULT_BIRTHDAY),
         Property(type: .Sex, value: DEFAULT_SEX_TYPE),
     ]
-
-    var editModeEnabled = false
 }
