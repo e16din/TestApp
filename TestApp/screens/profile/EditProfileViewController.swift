@@ -13,12 +13,13 @@ class EditProfileViewController: UIViewController,
     ProfileViewProtocol,
     NavigationViewControllerDelegate {
 
-    var oldValues: [Any]!
+    var oldValues: [ProfileFruit.Property]!
 
     var vNavigationBar: UINavigationBar!
     var vProfileContainer: ProfileView!
     var vBirthdayPicker: DatePickerView!
     var vSexPicker: ItemPickerView!
+    var vExitAlert: UIAlertController!
 
     func getPropertyIndex(propertyType: ProfileFruit.Property.PropertyType) -> Int {
         fruits.profile.properties.firstIndex(where: { $0.type == propertyType })!
@@ -43,11 +44,6 @@ class EditProfileViewController: UIViewController,
 
     func onSexPropertyClick() {
         showSexPicker()
-    }
-
-    func onBackButtonPressed() -> Bool {
-        navigationController?.popViewController(animated: true)
-        return true
     }
 
     // Actions
@@ -75,15 +71,7 @@ class EditProfileViewController: UIViewController,
         let defaults = UserDefaults.standard
 
         for property in fruits.profile.properties {
-            switch property.type {
-            case .Birthday:
-                let birthdayDate = property.value as? Date
-                let birthdayText = birthdayDate?.toString(dateFormat: "dd.MM.yyyy") ?? ProfileFruit.DEFAULT_BIRTHDAY
-                defaults.set(birthdayText, forKey: property.type.toString())
-
-            default:
-                defaults.set(property.value, forKey: property.type.toString())
-            }
+            defaults.set(property.value, forKey: property.type.toString())
         }
     }
 
@@ -107,7 +95,7 @@ class EditProfileViewController: UIViewController,
         view.addSubview(vProfileContainer)
     }
 
-    func updatePropertyValue(value: Any, propertyType: ProfileFruit.Property.PropertyType) {
+    func updatePropertyValue(value: String, propertyType: ProfileFruit.Property.PropertyType) {
         let propertyIndex = getPropertyIndex(propertyType: propertyType)
         fruits.profile.properties[propertyIndex].value = value
         vProfileContainer.updateProperty(index: propertyIndex)
@@ -120,19 +108,21 @@ extension EditProfileViewController: DatePickerDelegate {
     // Events
 
     func onDatePickerValueChanged(selectedDate: Date) {
-        updatePropertyValue(value: selectedDate, propertyType: .Birthday)
+        let dateString = selectedDate.toString(dateFormat: "dd.MM.yyyy")
+        updatePropertyValue(value: dateString, propertyType: .Birthday)
     }
 
     func onDatePickerValueSelected(selectedDate: Date) {
         hideDatePicker()
-        updatePropertyValue(value: selectedDate, propertyType: .Birthday)
+        let dateString = selectedDate.toString(dateFormat: "dd.MM.yyyy")
+        updatePropertyValue(value: dateString, propertyType: .Birthday)
     }
 
     func onDatePickerCancel() {
         hideDatePicker()
 
         let birthdayPropertyIndex = getPropertyIndex(propertyType: .Birthday)
-        let oldBirthdayDate = oldValues[birthdayPropertyIndex]
+        let oldBirthdayDate = oldValues[birthdayPropertyIndex].value
         updatePropertyValue(value: oldBirthdayDate, propertyType: .Birthday)
     }
 
@@ -152,8 +142,17 @@ extension EditProfileViewController: DatePickerDelegate {
         vBirthdayPicker.datePickerDelegate = self
 
         let birthdayPropertyIndex = getPropertyIndex(propertyType: .Birthday)
-        let date = fruits.profile.properties[birthdayPropertyIndex].value as? Date ?? Date()
-        vBirthdayPicker.initPicker(date: date)
+        let dateValue = fruits.profile.properties[birthdayPropertyIndex].value
+
+        vBirthdayPicker.initPicker(date: {
+            let hasSelectedDate = dateValue != ProfileFruit.DEFAULT_BIRTHDAY
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd.MM.yyyy"
+
+            return hasSelectedDate
+                ? dateFormatter.date(from: dateValue)!
+                : Date()
+        }())
 
         view.addSubview(vBirthdayPicker)
 
@@ -175,19 +174,19 @@ extension EditProfileViewController: ItemPickerDelegate {
     // Events
 
     func onItemPickerValueChanged(selectedItemPosition: Int) {
-        updatePropertyValue(value: selectedItemPosition, propertyType: .Sex)
+        updatePropertyValue(value: String(selectedItemPosition), propertyType: .Sex)
     }
 
     func onItemPickerValueSelected(selectedItemPosition: Int) {
         hideItemPicker()
-        updatePropertyValue(value: selectedItemPosition, propertyType: .Sex)
+        updatePropertyValue(value: String(selectedItemPosition), propertyType: .Sex)
     }
 
     func onItemPickerCancel() {
         hideItemPicker()
 
         let sexPropertyIndex = getPropertyIndex(propertyType: .Sex)
-        let oldSexType = oldValues[sexPropertyIndex]
+        let oldSexType = oldValues[sexPropertyIndex].value
         updatePropertyValue(value: oldSexType, propertyType: .Sex)
     }
 
@@ -205,7 +204,9 @@ extension EditProfileViewController: ItemPickerDelegate {
 
         vSexPicker = ItemPickerView()
         vSexPicker.itemPickerDelegate = self
-        vSexPicker.initPicker(items: ProfileFruit.SEX_TYPES)
+
+        let sexValue = fruits.profile.properties[getPropertyIndex(propertyType: .Sex)].value
+        vSexPicker.initPicker(items: ProfileFruit.SEX_TYPES, selectedRow: Int(sexValue)!)
 
         view.addSubview(vSexPicker)
 
@@ -218,5 +219,67 @@ extension EditProfileViewController: ItemPickerDelegate {
 
     func hideItemPicker() {
         vSexPicker.removeFromSuperview()
+    }
+}
+
+// Handle Back Button
+extension EditProfileViewController {
+
+    // Events
+
+    func onBackButtonPressed() -> Bool {
+
+        var hasChanges = false
+
+        for (index, property) in fruits.profile.properties.enumerated() {
+            hasChanges = property.value != oldValues[index].value
+            if (hasChanges) {
+                break
+            }
+        }
+
+        if hasChanges {
+            showExitAlert()
+            return false
+        }
+
+        return true
+    }
+
+    var onExitAlertActionSave: (UIAlertAction!) -> () {
+        get {
+            { (action: UIAlertAction!) in
+                self.saveProfileProperties()
+                self.hideEditProfileScreen()
+            }
+        }
+    }
+
+    var onExitAlertActionCancel: (UIAlertAction!) -> () {
+        get {
+            { (action: UIAlertAction!) in
+                self.fruits.profile.properties = self.oldValues
+                self.hideEditProfileScreen()
+            }
+        }
+    }
+
+    // Actions
+
+    func showExitAlert() {
+        vExitAlert = UIAlertController(title: "Внимание!",
+            message: "Данные были изменены. Вы желаете сохранить изменения, в противном случае внесенные правки будут\nотменены.",
+            preferredStyle: UIAlertController.Style.alert)
+
+        vExitAlert.addAction(UIAlertAction(title: "Сохранить", style: .default, handler: onExitAlertActionSave))
+        vExitAlert.addAction(UIAlertAction(title: "Пропустить", style: .cancel, handler: onExitAlertActionCancel))
+
+        present(vExitAlert, animated: true, completion: nil)
+    }
+
+    func hideEditProfileScreen() {
+        (navigationController as! NavigationViewController).backDelegate = nil
+        vExitAlert.dismiss(animated: false)
+        navigationController?.popViewController(animated: true)
     }
 }

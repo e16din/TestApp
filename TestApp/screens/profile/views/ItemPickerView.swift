@@ -34,10 +34,10 @@ class ItemPickerView: UIView,
         super.init(coder: coder)
     }
 
-    func initPicker(items: [Int: String]) {
+    func initPicker(items: [Int: String], selectedRow: Int) {
         itemsDictionary = items
 
-        showItemPicker()
+        showItemPicker(selectedRow: selectedRow)
         showToolbar()
         showOutsideStub()
     }
@@ -64,11 +64,12 @@ class ItemPickerView: UIView,
 
     // Actions
 
-    func showItemPicker() {
+    func showItemPicker(selectedRow: Int) {
         vItemPicker.translatesAutoresizingMaskIntoConstraints = false
         vItemPicker.dataSource = self
         vItemPicker.delegate = self
         vItemPicker.backgroundColor = .white
+        vItemPicker.selectRow(selectedRow, inComponent: 0, animated: false)
 
         addSubview(vItemPicker)
 

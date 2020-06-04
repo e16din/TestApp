@@ -39,6 +39,11 @@ class NavigationViewController: UINavigationController, UINavigationBarDelegate 
     var backDelegate: NavigationViewControllerDelegate?
 
     func navigationBar(_ navigationBar: UINavigationBar, shouldPop item: UINavigationItem) -> Bool {
-        return backDelegate?.onBackButtonPressed() ?? true
+        let shouldPop = backDelegate?.onBackButtonPressed() ?? true
+        if shouldPop {
+            popViewController(animated: true)
+        }
+
+        return shouldPop
     }
 }

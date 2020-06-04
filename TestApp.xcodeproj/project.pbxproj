@@ -15,6 +15,7 @@
 		710837CFDA16AE159E07FEF8 /* PrefactoringUserPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083B09B1BE72A8ED75674A /* PrefactoringUserPhoto.swift */; };
 		71083851B1548B977EBFAEEA /* DatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7108387B3A1AFAAEAD424A3D /* DatePickerView.swift */; };
 		71083971F2DA3A572E8DA39F /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083898755E027E99B9D353 /* EditProfileViewController.swift */; };
+		710839EBE0C4EF50E4758AE9 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083A56130C84C05EF6630D /* Date.swift */; };
 		71083A4FBBC1F9CF33E23383 /* PrefactoringEditProfileOnBackClick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7108367545A88851DEE8FCAD /* PrefactoringEditProfileOnBackClick.swift */; };
 		71083C57BE27C56AA7D0ADA0 /* PrefactoringEditProfileOnSaveClick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083AD20E76503428676DEA /* PrefactoringEditProfileOnSaveClick.swift */; };
 		71083CD69C43507511D81DF7 /* ItemPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083625CD79EAB752DB8859 /* ItemPickerView.swift */; };
@@ -33,6 +34,7 @@
 		7108383C2037C220D908C3C5 /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		7108387B3A1AFAAEAD424A3D /* DatePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerView.swift; sourceTree = "<group>"; };
 		71083898755E027E99B9D353 /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
+		71083A56130C84C05EF6630D /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		71083A83D7A826388B21A411 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		71083AD20E76503428676DEA /* PrefactoringEditProfileOnSaveClick.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefactoringEditProfileOnSaveClick.swift; sourceTree = "<group>"; };
 		71083B09B1BE72A8ED75674A /* PrefactoringUserPhoto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefactoringUserPhoto.swift; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 			children = (
 				7108383C2037C220D908C3C5 /* UIView.swift */,
 				71083BD6CDA18ECD9F89F283 /* UIViewController.swift */,
+				71083A56130C84C05EF6630D /* Date.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 				710837CFDA16AE159E07FEF8 /* PrefactoringUserPhoto.swift in Sources */,
 				71083971F2DA3A572E8DA39F /* EditProfileViewController.swift in Sources */,
 				710835F513FA64657C9F2976 /* UIViewController.swift in Sources */,
+				710839EBE0C4EF50E4758AE9 /* Date.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

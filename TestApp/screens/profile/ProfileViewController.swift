@@ -41,17 +41,7 @@ class ProfileViewController: UIViewController {
         let defaults = UserDefaults.standard
 
         for (index, property) in fruits.profile.properties.enumerated() {
-            switch property.type {
-            case .Birthday:
-                let birthdayValue: String? = defaults.string(forKey: property.type.toString())
-                fruits.profile.properties[index].value = {
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "dd.MM.yyyy"
-                    return dateFormatter.date(from: birthdayValue ?? ProfileFruit.DEFAULT_BIRTHDAY)
-                }()
-
-            default:
-                let value: Any? = defaults.value(forKey: property.type.toString())
+            if let value = defaults.string(forKey: property.type.toString()) {
                 fruits.profile.properties[index].value = value
             }
         }
@@ -60,7 +50,7 @@ class ProfileViewController: UIViewController {
     func showEditProfileScreen() {
         let editProfileViewController = EditProfileViewController()
         editProfileViewController.oldValues = fruits.profile.properties.map({ it in
-            it.value as Any
+            it.copy()
         })
         navigationController?.pushViewController(editProfileViewController, animated: true)
     }

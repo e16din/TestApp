@@ -34,20 +34,20 @@ class ProfileFruit {
         }
 
         var type: PropertyType
-        var value: Any?
+        var value: String
+
+        func copy() -> Property {
+            return Property(type: type, value: value)
+        }
     }
 
-    static let DEFAULT_NAME = "Иван"
-    static let DEFAULT_SURNAME = "Иванов"
-    static let DEFAULT_PATRONYMIC = "Иванович"
     static let DEFAULT_BIRTHDAY = "Не указана"
-    static let DEFAULT_SEX_TYPE = 0
 
     var properties: [Property] = [
-        Property(type: .Name, value: DEFAULT_NAME),
-        Property(type: .Surname, value: DEFAULT_SURNAME),
-        Property(type: .Patronymic, value: DEFAULT_PATRONYMIC),
+        Property(type: .Name, value: "Иван"),
+        Property(type: .Surname, value: "Иванов"),
+        Property(type: .Patronymic, value: "Иванович"),
         Property(type: .Birthday, value: DEFAULT_BIRTHDAY),
-        Property(type: .Sex, value: DEFAULT_SEX_TYPE),
+        Property(type: .Sex, value: "0"),
     ]
 }

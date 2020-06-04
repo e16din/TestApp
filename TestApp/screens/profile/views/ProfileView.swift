@@ -57,7 +57,8 @@ class ProfileView: UIView,
         case .Sex:
             delegate?.onSexPropertyClick()
         case .Name, .Surname, .Patronymic:
-            "Set focus to any PropertyViewCell.UITextView"
+            // Set focus to any PropertyViewCell.UITextView
+            break
         }
     }
 
@@ -112,24 +113,19 @@ class ProfileView: UIView,
     func makeDataForCell(property: ProfileFruit.Property) -> (name: String, value: String, isSingleLine: Bool) {
         switch property.type {
         case .Birthday:
-            let birthdayDate = property.value as? Date
-            let birthdayText = birthdayDate?.toString(dateFormat: "dd.MM.yyyy") ?? ProfileFruit.DEFAULT_BIRTHDAY
-            return ("Дата Рождения", birthdayText, true)
+            return ("Дата Рождения", property.value, true)
 
         case .Sex:
-            let sexType = property.value as? Int ?? ProfileFruit.DEFAULT_SEX_TYPE
-            let sexText  = ProfileFruit.SEX_TYPES[sexType] ?? ProfileFruit.SEX_TYPES[0]!
-
-            return ("Пол", sexText, true)
+            return ("Пол", ProfileFruit.SEX_TYPES[Int(property.value)!]!, true)
 
         case .Name:
-            return ("Имя", property.value as? String ?? ProfileFruit.DEFAULT_NAME, true)
+            return ("Имя", property.value, true)
 
         case .Surname:
-            return ("Фамилия", property.value as? String ?? ProfileFruit.DEFAULT_SURNAME, false)
+            return ("Фамилия", property.value, false)
 
         case .Patronymic:
-            return ("Отчество", property.value as? String ?? ProfileFruit.DEFAULT_PATRONYMIC, true)
+            return ("Отчество", property.value, true)
         }
     }
 
@@ -147,19 +143,11 @@ class ProfileView: UIView,
             profile.properties[rowIndex].value = text
 
         default:
-            "Do nothing"
+            break
         }
     }
 
     func getValueFieldView(rowIndex index: Int) -> PropertyViewCell {
         return vPropertiesTableContainer.cellForRow(at: IndexPath(item: index, section: 0)) as! PropertyViewCell
-    }
-}
-
-extension Date {
-    func toString(dateFormat: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = dateFormat
-        return dateFormatter.string(from: self)
     }
 }
