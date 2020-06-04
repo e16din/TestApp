@@ -111,21 +111,24 @@ class ProfileView: UIView,
     }
 
     func makeDataForCell(property: ProfileFruit.Property) -> (name: String, value: String, isSingleLine: Bool) {
+        let propertyValue: String = property.value
+        let isValueEmpty = propertyValue.isEmpty
+
         switch property.type {
         case .Birthday:
-            return ("Дата Рождения", property.value, true)
+            return ("Дата Рождения", isValueEmpty ? "Не указана" : propertyValue, true)
 
         case .Sex:
-            return ("Пол", ProfileFruit.SEX_TYPES[Int(property.value)!]!, true)
+            return ("Пол", ProfileFruit.SEX_TYPES[Int(isValueEmpty ? "0" : propertyValue)!]!, true)
 
         case .Name:
-            return ("Имя", property.value, true)
+            return ("Имя", isValueEmpty ? "Не указано" : propertyValue, true)
 
         case .Surname:
-            return ("Фамилия", property.value, false)
+            return ("Фамилия", isValueEmpty ? "Не указана" : propertyValue, false)
 
         case .Patronymic:
-            return ("Отчество", property.value, true)
+            return ("Отчество", isValueEmpty ? "Не указано" : propertyValue, true)
         }
     }
 

@@ -33,11 +33,6 @@ class EditProfileViewController: UIViewController,
         showProfileView()
     }
 
-    @objc func onActionSaveClick() {
-        saveProfileProperties()
-        showValidationFailedAlert()
-    }
-
     func onBirthdayPropertyClick() {
         showBirthdayPicker()
     }
@@ -48,30 +43,15 @@ class EditProfileViewController: UIViewController,
 
     // Actions
 
-    func showValidationFailedAlert() {
-        let alert = UIAlertController(title: "Ошибка", message: "Все поля, за исключением отчества являются обязательными", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-            switch action.style { //todo
-            case .default:
-                print("default")
-
-            case .cancel:
-                print("cancel")
-
-            case .destructive:
-                print("destructive")
-
-
-            }
-        }))
-        self.present(alert, animated: true, completion: nil)
-    }
-
     func saveProfileProperties() {
         let defaults = UserDefaults.standard
 
         for property in fruits.profile.properties {
             defaults.set(property.value, forKey: property.type.toString())
+        }
+
+        oldValues = fruits.profile.properties.map { property -> ProfileFruit.Property in
+            return property.copy()
         }
     }
 
@@ -79,10 +59,11 @@ class EditProfileViewController: UIViewController,
         let vBackButton = UIBarButtonItem()
         vBackButton.title = "Назад"
         navigationController?.navigationBar.topItem?.backBarButtonItem = vBackButton
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action: #selector(onActionSaveClick))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .plain, target: self,
+            action: #selector(onActionSaveClick))
         navigationItem.title = "Редактирование"
 
-        (self.navigationController as? NavigationViewController)?.backDelegate = self
+        (navigationController as? NavigationViewController)?.backDelegate = self
 
     }
 
@@ -145,7 +126,7 @@ extension EditProfileViewController: DatePickerDelegate {
         let dateValue = fruits.profile.properties[birthdayPropertyIndex].value
 
         vBirthdayPicker.initPicker(date: {
-            let hasSelectedDate = dateValue != ProfileFruit.DEFAULT_BIRTHDAY
+            let hasSelectedDate = !dateValue.isEmpty
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd.MM.yyyy"
 
@@ -246,24 +227,6 @@ extension EditProfileViewController {
         return true
     }
 
-    var onExitAlertActionSave: (UIAlertAction!) -> () {
-        get {
-            { (action: UIAlertAction!) in
-                self.saveProfileProperties()
-                self.hideEditProfileScreen()
-            }
-        }
-    }
-
-    var onExitAlertActionCancel: (UIAlertAction!) -> () {
-        get {
-            { (action: UIAlertAction!) in
-                self.fruits.profile.properties = self.oldValues
-                self.hideEditProfileScreen()
-            }
-        }
-    }
-
     // Actions
 
     func showExitAlert() {
@@ -271,8 +234,21 @@ extension EditProfileViewController {
             message: "Данные были изменены. Вы желаете сохранить изменения, в противном случае внесенные правки будут\nотменены.",
             preferredStyle: UIAlertController.Style.alert)
 
-        vExitAlert.addAction(UIAlertAction(title: "Сохранить", style: .default, handler: onExitAlertActionSave))
-        vExitAlert.addAction(UIAlertAction(title: "Пропустить", style: .cancel, handler: onExitAlertActionCancel))
+        vExitAlert.addAction(UIAlertAction(title: "Сохранить", style: .default, handler: { (action: UIAlertAction?) in
+            let isValid = self.checkProperties()
+            if !isValid {
+                self.showValidationFailedAlert()
+
+            } else {
+                self.saveProfileProperties()
+                self.hideEditProfileScreen()
+            }
+        }))
+
+        vExitAlert.addAction(UIAlertAction(title: "Пропустить", style: .cancel, handler: { (action: UIAlertAction?) in
+            self.fruits.profile.properties = self.oldValues
+            self.hideEditProfileScreen()
+        }))
 
         present(vExitAlert, animated: true, completion: nil)
     }
@@ -281,5 +257,39 @@ extension EditProfileViewController {
         (navigationController as! NavigationViewController).backDelegate = nil
         vExitAlert.dismiss(animated: false)
         navigationController?.popViewController(animated: true)
+    }
+}
+
+// Handle Action Save
+extension EditProfileViewController {
+
+    func checkProperties() -> Bool {
+        for property in fruits.profile.properties {
+            if (property.type != .Patronymic && property.value.isEmpty) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    // Events
+
+    @objc func onActionSaveClick() {
+        let isValid = checkProperties()
+        if !isValid {
+            showValidationFailedAlert()
+
+        } else {
+            saveProfileProperties()
+        }
+    }
+
+    // Actions
+
+    func showValidationFailedAlert() {
+        let alert = UIAlertController(title: "Ошибка", message: "Все поля, за исключением отчества являются обязательными", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 }

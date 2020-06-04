@@ -41,13 +41,11 @@ class ProfileFruit {
         }
     }
 
-    static let DEFAULT_BIRTHDAY = "Не указана"
-
     var properties: [Property] = [
-        Property(type: .Name, value: "Иван"),
-        Property(type: .Surname, value: "Иванов"),
-        Property(type: .Patronymic, value: "Иванович"),
-        Property(type: .Birthday, value: DEFAULT_BIRTHDAY),
-        Property(type: .Sex, value: "0"),
+        Property(type: .Name, value: ""),
+        Property(type: .Surname, value: ""),
+        Property(type: .Patronymic, value: ""),
+        Property(type: .Birthday, value: ""),
+        Property(type: .Sex, value: ""),
     ]
 }
