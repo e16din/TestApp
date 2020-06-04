@@ -209,7 +209,6 @@ extension EditProfileViewController {
     // Events
 
     func onBackButtonPressed() -> Bool {
-
         var hasChanges = false
 
         for (index, property) in fruits.profile.properties.enumerated() {

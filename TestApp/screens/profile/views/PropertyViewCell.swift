@@ -27,6 +27,25 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
     var isEditableProperty = false
     var rowIndex: Int!
 
+    func updateCellHeight() {
+        let startHeight = vPropertyField.frame.size.height
+        let calcHeight = vPropertyField.sizeThatFits(vPropertyField.frame.size).height
+        print("startHeight: \(startHeight) | calcHeight: \(calcHeight)")
+
+        let delta: CGFloat = 4
+        if startHeight + delta < calcHeight || startHeight - delta > calcHeight {
+            UIView.setAnimationsEnabled(false)
+            vPropertyField.sizeToFit()
+            if vPropertyField.frame.size.width < DEFAULT_WIDTH {
+                vPropertyField.frame.size.width = DEFAULT_WIDTH
+            }
+
+            cellDelegate!.onTextHeightChanged(cell: self)
+
+            UIView.setAnimationsEnabled(true)
+        }
+    }
+
     // Events
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -104,25 +123,6 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
         )
 
         contentView.addConstraints([leftConstraint, rightConstraint, topConstraint, bottomConstraint])
-    }
-
-    func updateCellHeight() {
-        let startHeight = vPropertyField.frame.size.height
-        let calcHeight = vPropertyField.sizeThatFits(vPropertyField.frame.size).height
-        print("startHeight: \(startHeight) | calcHeight: \(calcHeight)")
-
-        let delta: CGFloat = 4
-        if startHeight + delta < calcHeight || startHeight - delta > calcHeight {
-            UIView.setAnimationsEnabled(false)
-            vPropertyField.sizeToFit()
-            if vPropertyField.frame.size.width < DEFAULT_WIDTH {
-                vPropertyField.frame.size.width = DEFAULT_WIDTH
-            }
-
-            cellDelegate!.onTextHeightChanged(cell: self)
-
-            UIView.setAnimationsEnabled(true)
-        }
     }
 
     func updatePropertyView(values: (name: String, value: String, isSingleLine: Bool)) {

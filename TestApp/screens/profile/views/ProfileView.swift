@@ -24,7 +24,33 @@ class ProfileView: UIView,
 
     var delegate: ProfileViewProtocol?
 
+    func makeDataForCell(property: ProfileFruit.Property) -> (name: String, value: String, isSingleLine: Bool) {
+        let propertyValue: String = property.value
+        let isValueEmpty = propertyValue.isEmpty
+
+        switch property.type {
+        case .Birthday:
+            return ("Дата Рождения", isValueEmpty ? "Не указана" : propertyValue, true)
+
+        case .Sex:
+            return ("Пол", ProfileFruit.SEX_TYPES[Int(isValueEmpty ? "0" : propertyValue)!]!, true)
+
+        case .Name:
+            let emptyValue = editModeEnabled ? "" : "Не указано"
+            return ("Имя", isValueEmpty ? emptyValue : propertyValue, true)
+
+        case .Surname:
+            let emptyValue = editModeEnabled ? "" : "Не указана"
+            return ("Фамилия", isValueEmpty ? emptyValue : propertyValue, false)
+
+        case .Patronymic:
+            let emptyValue = editModeEnabled ? "" : "Не указано"
+            return ("Отчество", isValueEmpty ? emptyValue : propertyValue, true)
+        }
+    }
+
     // Events
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -43,7 +69,6 @@ class ProfileView: UIView,
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PROPERTY_CELL_IDENTIFIER) as! PropertyViewCell
         cell.selectionStyle = .none
-
 
         showProperty(cell: cell, indexPath: indexPath)
 
@@ -110,31 +135,6 @@ class ProfileView: UIView,
         cell.updatePropertyView(values: makeDataForCell(property: property))
     }
 
-    func makeDataForCell(property: ProfileFruit.Property) -> (name: String, value: String, isSingleLine: Bool) {
-        let propertyValue: String = property.value
-        let isValueEmpty = propertyValue.isEmpty
-
-        switch property.type {
-        case .Birthday:
-            return ("Дата Рождения", isValueEmpty ? "Не указана" : propertyValue, true)
-
-        case .Sex:
-            return ("Пол", ProfileFruit.SEX_TYPES[Int(isValueEmpty ? "0" : propertyValue)!]!, true)
-
-        case .Name:
-            let emptyValue = editModeEnabled ? "" : "Не указано"
-            return ("Имя", isValueEmpty ? emptyValue : propertyValue, true)
-
-        case .Surname:
-            let emptyValue = editModeEnabled ? "" : "Не указана"
-            return ("Фамилия", isValueEmpty ? emptyValue : propertyValue, false)
-
-        case .Patronymic:
-            let emptyValue = editModeEnabled ? "" : "Не указано"
-            return ("Отчество", isValueEmpty ? emptyValue : propertyValue, true)
-        }
-    }
-
     func updateProperty(index: Int) {
         vPropertiesTableContainer.reloadRows(at: [IndexPath(item: index, section: 0)], with: .none)
     }
@@ -151,9 +151,5 @@ class ProfileView: UIView,
         default:
             break
         }
-    }
-
-    func getValueFieldView(rowIndex index: Int) -> PropertyViewCell {
-        return vPropertiesTableContainer.cellForRow(at: IndexPath(item: index, section: 0)) as! PropertyViewCell
     }
 }
