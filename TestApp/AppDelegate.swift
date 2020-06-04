@@ -39,6 +39,38 @@ class NavigationViewController: UINavigationController, UINavigationBarDelegate 
     var backDelegate: NavigationViewControllerDelegate?
 
     func navigationBar(_ navigationBar: UINavigationBar, shouldPop item: UINavigationItem) -> Bool {
-        return backDelegate?.onBackButtonPressed() ?? true
+        let shouldPop = backDelegate?.onBackButtonPressed() ?? true
+        return shouldPop
+    }
+
+    func navigationBar(_ navigationBar: UINavigationBar, didPop item: UINavigationItem) {
+        backDelegate = nil
+    }
+}
+
+class IOSVersion {
+    class func SYSTEM_VERSION_EQUAL_TO(version: NSString) -> Bool {
+        return UIDevice.current.systemVersion.compare(version as String,
+            options: NSString.CompareOptions.numeric) == ComparisonResult.orderedSame
+    }
+
+    class func SYSTEM_VERSION_GREATER_THAN(version: NSString) -> Bool {
+        return UIDevice.current.systemVersion.compare(version as String,
+            options: NSString.CompareOptions.numeric) == ComparisonResult.orderedDescending
+    }
+
+    class func SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(version: NSString) -> Bool {
+        return UIDevice.current.systemVersion.compare(version as String,
+            options: NSString.CompareOptions.numeric) != ComparisonResult.orderedDescending
+    }
+
+    class func SYSTEM_VERSION_LESS_THAN(version: NSString) -> Bool {
+        return UIDevice.current.systemVersion.compare(version as String,
+            options: NSString.CompareOptions.numeric) == ComparisonResult.orderedDescending
+    }
+
+    class func SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(version: NSString) -> Bool {
+        return UIDevice.current.systemVersion.compare(version as String,
+            options: NSString.CompareOptions.numeric) != ComparisonResult.orderedDescending
     }
 }

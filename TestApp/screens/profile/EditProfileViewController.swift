@@ -223,7 +223,14 @@ extension EditProfileViewController {
             return false
         }
 
-        (navigationController as! NavigationViewController).backDelegate = nil
+        // NOTE: workaround for crash on iOS 11:
+        // Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: 'Override of -navigationBar:shouldPopItem: returned YES after manually popping a view controller
+        if #available(iOS 13, *){
+            // do nothing
+        }else {
+            hideEditProfileScreen()
+        }
+
         return true
     }
 
@@ -256,7 +263,6 @@ extension EditProfileViewController {
     func hideEditProfileScreen() {
         vExitAlert?.dismiss(animated: false)
         navigationController?.popViewController(animated: true)
-        (navigationController as! NavigationViewController).backDelegate = nil
     }
 }
 
