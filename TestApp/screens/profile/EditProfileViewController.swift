@@ -223,6 +223,7 @@ extension EditProfileViewController {
             return false
         }
 
+        (navigationController as! NavigationViewController).backDelegate = nil
         return true
     }
 
@@ -253,9 +254,9 @@ extension EditProfileViewController {
     }
 
     func hideEditProfileScreen() {
-        (navigationController as! NavigationViewController).backDelegate = nil
-        vExitAlert.dismiss(animated: false)
+        vExitAlert?.dismiss(animated: false)
         navigationController?.popViewController(animated: true)
+        (navigationController as! NavigationViewController).backDelegate = nil
     }
 }
 
