@@ -187,7 +187,7 @@ extension EditProfileViewController: ItemPickerDelegate {
         vSexPicker.itemPickerDelegate = self
 
         let sexValue = fruits.profile.properties[getPropertyIndex(propertyType: .Sex)].value
-        vSexPicker.initPicker(items: ProfileFruit.SEX_TYPES, selectedRow: Int(sexValue)!)
+        vSexPicker.initPicker(items: ProfileFruit.SEX_TYPES, selectedRow: Int(sexValue.isEmpty ? "0" : sexValue)!)
 
         view.addSubview(vSexPicker)
 

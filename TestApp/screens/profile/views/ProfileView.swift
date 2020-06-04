@@ -122,13 +122,16 @@ class ProfileView: UIView,
             return ("Пол", ProfileFruit.SEX_TYPES[Int(isValueEmpty ? "0" : propertyValue)!]!, true)
 
         case .Name:
-            return ("Имя", isValueEmpty ? "Не указано" : propertyValue, true)
+            let emptyValue = editModeEnabled ? "" : "Не указано"
+            return ("Имя", isValueEmpty ? emptyValue : propertyValue, true)
 
         case .Surname:
-            return ("Фамилия", isValueEmpty ? "Не указана" : propertyValue, false)
+            let emptyValue = editModeEnabled ? "" : "Не указана"
+            return ("Фамилия", isValueEmpty ? emptyValue : propertyValue, false)
 
         case .Patronymic:
-            return ("Отчество", isValueEmpty ? "Не указано" : propertyValue, true)
+            let emptyValue = editModeEnabled ? "" : "Не указано"
+            return ("Отчество", isValueEmpty ? emptyValue : propertyValue, true)
         }
     }
 
