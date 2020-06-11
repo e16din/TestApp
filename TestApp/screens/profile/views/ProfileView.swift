@@ -24,7 +24,7 @@ class ProfileView: UIView,
 
     var delegate: ProfileViewProtocol?
 
-    func makeDataForCell(property: ProfileFruit.Property) -> (name: String, value: String, isSingleLine: Bool) {
+    func makeDataForCell(property: ProfileModelController.Property) -> (name: String, value: String, isSingleLine: Bool) {
         let propertyValue: String = property.value
         let isValueEmpty = propertyValue.isEmpty
 
@@ -33,7 +33,7 @@ class ProfileView: UIView,
             return ("Дата Рождения", isValueEmpty ? "Не указана" : propertyValue, true)
 
         case .Sex:
-            return ("Пол", ProfileFruit.SEX_TYPES[Int(isValueEmpty ? "0" : propertyValue)!]!, true)
+            return ("Пол", fruits.mcProfile.sexTypes[Int(isValueEmpty ? "0" : propertyValue)!]!, true)
 
         case .Name:
             let emptyValue = editModeEnabled ? "" : "Не указано"
@@ -63,7 +63,7 @@ class ProfileView: UIView,
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return fruits.profile.properties.count
+        return fruits.mcProfile.properties.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -76,7 +76,7 @@ class ProfileView: UIView,
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch fruits.profile.properties[indexPath.row].type {
+        switch fruits.mcProfile.properties[indexPath.row].type {
         case .Birthday:
             delegate?.onBirthdayPropertyClick()
         case .Sex:
@@ -91,7 +91,7 @@ class ProfileView: UIView,
         updateProfileProperties()
     }
 
-    func onTextChanged(text: String!, rowIndex: Int!) {
+    func onTextChanged(text: String, rowIndex: Int) {
         changePropertyValue(rowIndex: rowIndex, text: text)
     }
 
@@ -124,7 +124,7 @@ class ProfileView: UIView,
         cell.cellDelegate = self
         cell.rowIndex = indexPath.row
 
-        let property = fruits.profile.properties[indexPath.row]
+        let property = fruits.mcProfile.properties[indexPath.row]
 
         if property.type == .Sex || property.type == .Birthday {
             cell.isEditableProperty = false
@@ -139,8 +139,8 @@ class ProfileView: UIView,
         vPropertiesTableContainer.reloadRows(at: [IndexPath(item: index, section: 0)], with: .none)
     }
 
-    func changePropertyValue(rowIndex: Int!, text: String!) {
-        let profile = fruits.profile!
+    func changePropertyValue(rowIndex: Int, text: String) {
+        let profile = fruits.mcProfile!
 
         let property = profile.properties[rowIndex]
 

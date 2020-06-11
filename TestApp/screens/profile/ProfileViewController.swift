@@ -10,7 +10,7 @@ import UIKit
 
 class ProfileViewController: UIViewController {
 
-    let profileFruit = ProfileFruit()
+    let profileFruit = ProfileModelController()
 
     var vProfileContainer: ProfileView!
 
@@ -36,21 +36,21 @@ class ProfileViewController: UIViewController {
     // Actions
 
     func loadProfileProperties() {
-        fruits.profile = profileFruit
+        fruits.mcProfile = profileFruit
 
         let defaults = UserDefaults.standard
 
-        for (index, property) in fruits.profile.properties.enumerated() {
-            if let value = defaults.string(forKey: property.type.toString()) {
-                fruits.profile.properties[index].value = value
+        for (index, property) in fruits.mcProfile.properties.enumerated() {
+            if let value = defaults.string(forKey: property.type.rawValue) {
+                fruits.mcProfile.properties[index].value = value
             }
         }
     }
 
     func showEditProfileScreen() {
         let editProfileViewController = EditProfileViewController()
-        editProfileViewController.oldValues = fruits.profile.properties.map({ it in
-            it.copy()
+        editProfileViewController.oldValues = fruits.mcProfile.properties.map({ it in
+            it
         })
         navigationController?.pushViewController(editProfileViewController, animated: true)
     }

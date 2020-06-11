@@ -13,7 +13,7 @@ class EditProfileViewController: UIViewController,
     ProfileViewProtocol,
     NavigationViewControllerDelegate {
 
-    var oldValues: [ProfileFruit.Property]!
+    var oldValues: [ProfileModelController.Property]!
 
     var vNavigationBar: UINavigationBar!
     var vProfileContainer: ProfileView!
@@ -21,8 +21,9 @@ class EditProfileViewController: UIViewController,
     var vSexPicker: ItemPickerView!
     var vExitAlert: UIAlertController!
 
-    func getPropertyIndex(propertyType: ProfileFruit.Property.PropertyType) -> Int {
-        fruits.profile.properties.firstIndex(where: { $0.type == propertyType })!
+
+    func getPropertyIndex(propertyType: ProfileModelController.Property.PropertyType) -> Int {
+        fruits.mcProfile.properties.firstIndex(where: { $0.type == propertyType })!
     }
 
     // Events
@@ -46,12 +47,12 @@ class EditProfileViewController: UIViewController,
     func saveProfileProperties() {
         let defaults = UserDefaults.standard
 
-        for property in fruits.profile.properties {
-            defaults.set(property.value, forKey: property.type.toString())
+        for property in fruits.mcProfile.properties {
+            defaults.set(property.value, forKey: property.type.rawValue)
         }
 
-        oldValues = fruits.profile.properties.map { property -> ProfileFruit.Property in
-            return property.copy()
+        oldValues = fruits.mcProfile.properties.map { property -> ProfileModelController.Property in
+            return property
         }
     }
 
@@ -76,9 +77,9 @@ class EditProfileViewController: UIViewController,
         view.addSubview(vProfileContainer)
     }
 
-    func updatePropertyValue(value: String, propertyType: ProfileFruit.Property.PropertyType) {
+    func updatePropertyValue(value: String, propertyType: ProfileModelController.Property.PropertyType) {
         let propertyIndex = getPropertyIndex(propertyType: propertyType)
-        fruits.profile.properties[propertyIndex].value = value
+        fruits.mcProfile.properties[propertyIndex].value = value
         vProfileContainer.updateProperty(index: propertyIndex)
     }
 }
@@ -123,7 +124,7 @@ extension EditProfileViewController: DatePickerDelegate {
         vBirthdayPicker.datePickerDelegate = self
 
         let birthdayPropertyIndex = getPropertyIndex(propertyType: .Birthday)
-        let dateValue = fruits.profile.properties[birthdayPropertyIndex].value
+        let dateValue = fruits.mcProfile.properties[birthdayPropertyIndex].value
 
         vBirthdayPicker.initPicker(date: {
             let hasSelectedDate = !dateValue.isEmpty
@@ -186,8 +187,8 @@ extension EditProfileViewController: ItemPickerDelegate {
         vSexPicker = ItemPickerView()
         vSexPicker.itemPickerDelegate = self
 
-        let sexValue = fruits.profile.properties[getPropertyIndex(propertyType: .Sex)].value
-        vSexPicker.initPicker(items: ProfileFruit.SEX_TYPES, selectedRow: Int(sexValue.isEmpty ? "0" : sexValue)!)
+        let sexValue = fruits.mcProfile.properties[getPropertyIndex(propertyType: .Sex)].value
+        vSexPicker.initPicker(items: fruits.mcProfile.sexTypes, selectedRow: Int(sexValue.isEmpty ? "0" : sexValue)!)
 
         view.addSubview(vSexPicker)
 
@@ -211,7 +212,7 @@ extension EditProfileViewController {
     func onBackButtonPressed() -> Bool {
         var hasChanges = false
 
-        for (index, property) in fruits.profile.properties.enumerated() {
+        for (index, property) in fruits.mcProfile.properties.enumerated() {
             hasChanges = property.value != oldValues[index].value
             if (hasChanges) {
                 break
@@ -253,7 +254,7 @@ extension EditProfileViewController {
         }))
 
         vExitAlert.addAction(UIAlertAction(title: "Пропустить", style: .cancel, handler: { (action: UIAlertAction?) in
-            self.fruits.profile.properties = self.oldValues
+            self.fruits.mcProfile.properties = self.oldValues
             self.hideEditProfileScreen()
         }))
 
@@ -270,7 +271,7 @@ extension EditProfileViewController {
 extension EditProfileViewController {
 
     func checkProperties() -> Bool {
-        for property in fruits.profile.properties {
+        for property in fruits.mcProfile.properties {
             if (property.type != .Patronymic && property.value.isEmpty) {
                 return false
             }
@@ -298,4 +299,18 @@ extension EditProfileViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
+}
+
+// Pick User Photo
+extension EditProfileViewController : UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+
+    // Events
+
+    func onUserPhotoChanged() {
+        // get photo
+
+        // save photo on save action
+    }
+
+    // Actions
 }

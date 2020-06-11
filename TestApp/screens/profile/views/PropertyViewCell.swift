@@ -7,7 +7,7 @@ import UIKit
 
 protocol TextChangedProtocol: class {
     func onTextHeightChanged(cell: PropertyViewCell)
-    func onTextChanged(text: String!, rowIndex: Int!)
+    func onTextChanged(text: String, rowIndex: Int)
 }
 
 class PropertyViewCell: UITableViewCell, UITextViewDelegate {
