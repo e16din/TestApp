@@ -8,14 +8,9 @@
 
 import UIKit
 
-class Fruits {
-    weak var mcProfile: ProfileModelController!
-}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    let fruits = Fruits()
 
     var window: UIWindow?
     var navigationController: NavigationViewController?
@@ -23,8 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
 
-        let profileViewController = ProfileViewController()
-        navigationController = NavigationViewController(rootViewController: profileViewController)
+        let vcProfile = ProfileViewController(mc: ProfileModelController())
+
+        navigationController = NavigationViewController(rootViewController: vcProfile)
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
 

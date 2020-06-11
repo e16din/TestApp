@@ -8,16 +8,27 @@
 
 import UIKit
 
+
 class ProfileViewController: UIViewController {
 
-    let profileFruit = ProfileModelController()
+    var mcProfile : ProfileModelController!
 
     var vProfileContainer: ProfileView!
 
     // Events
 
+    required init(mc: ProfileModelController) {
+        mcProfile = mc
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("Error: NSCoder is not supported")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        mcProfile.loadProfileProperties()
 
         showNavigationBar()
         showProfileView()
@@ -25,7 +36,6 @@ class ProfileViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        loadProfileProperties()
         updateProfileView()
     }
 
@@ -35,24 +45,12 @@ class ProfileViewController: UIViewController {
 
     // Actions
 
-    func loadProfileProperties() {
-        fruits.mcProfile = profileFruit
-
-        let defaults = UserDefaults.standard
-
-        for (index, property) in fruits.mcProfile.properties.enumerated() {
-            if let value = defaults.string(forKey: property.type.rawValue) {
-                fruits.mcProfile.properties[index].value = value
-            }
-        }
-    }
-
     func showEditProfileScreen() {
-        let editProfileViewController = EditProfileViewController()
-        editProfileViewController.oldValues = fruits.mcProfile.properties.map({ it in
+        let vcEditProfile = EditProfileViewController(mc: mcProfile)
+        vcEditProfile.oldValues = mcProfile.properties.map({ it in
             it
         })
-        navigationController?.pushViewController(editProfileViewController, animated: true)
+        navigationController?.pushViewController(vcEditProfile, animated: true)
     }
 
     func showNavigationBar() {
@@ -65,7 +63,8 @@ class ProfileViewController: UIViewController {
     }
 
     func showProfileView() {
-        vProfileContainer = ProfileView(frame: UIScreen.main.bounds)
+        vProfileContainer = ProfileView(frame: UIScreen.main.bounds, mcProfile: mcProfile)
+        vProfileContainer.mcProfile = mcProfile
         vProfileContainer.editModeEnabled = false
         view.addSubview(vProfileContainer)
     }

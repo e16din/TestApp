@@ -13,6 +13,8 @@ class EditProfileViewController: UIViewController,
     ProfileViewProtocol,
     NavigationViewControllerDelegate {
 
+    var mcProfile: ProfileModelController!
+
     var oldValues: [ProfileModelController.Property]!
 
     var vNavigationBar: UINavigationBar!
@@ -23,10 +25,18 @@ class EditProfileViewController: UIViewController,
 
 
     func getPropertyIndex(propertyType: ProfileModelController.Property.PropertyType) -> Int {
-        fruits.mcProfile.properties.firstIndex(where: { $0.type == propertyType })!
+        mcProfile.properties.firstIndex(where: { $0.type == propertyType })!
     }
 
     // Events
+    required init(mc: ProfileModelController) {
+        mcProfile = mc
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("Error: NSCoder is not supported")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,11 +57,11 @@ class EditProfileViewController: UIViewController,
     func saveProfileProperties() {
         let defaults = UserDefaults.standard
 
-        for property in fruits.mcProfile.properties {
+        for property in mcProfile.properties {
             defaults.set(property.value, forKey: property.type.rawValue)
         }
 
-        oldValues = fruits.mcProfile.properties.map { property -> ProfileModelController.Property in
+        oldValues = mcProfile.properties.map { property -> ProfileModelController.Property in
             return property
         }
     }
@@ -65,11 +75,10 @@ class EditProfileViewController: UIViewController,
         navigationItem.title = "Редактирование"
 
         (navigationController as? NavigationViewController)?.backDelegate = self
-
     }
 
     func showProfileView() {
-        vProfileContainer = ProfileView(frame: view.frame)
+        vProfileContainer = ProfileView(frame: view.frame, mcProfile: mcProfile)
 
         vProfileContainer.editModeEnabled = true
         vProfileContainer.delegate = self
@@ -79,7 +88,7 @@ class EditProfileViewController: UIViewController,
 
     func updatePropertyValue(value: String, propertyType: ProfileModelController.Property.PropertyType) {
         let propertyIndex = getPropertyIndex(propertyType: propertyType)
-        fruits.mcProfile.properties[propertyIndex].value = value
+        mcProfile.properties[propertyIndex].value = value
         vProfileContainer.updateProperty(index: propertyIndex)
     }
 }
@@ -124,7 +133,7 @@ extension EditProfileViewController: DatePickerDelegate {
         vBirthdayPicker.datePickerDelegate = self
 
         let birthdayPropertyIndex = getPropertyIndex(propertyType: .Birthday)
-        let dateValue = fruits.mcProfile.properties[birthdayPropertyIndex].value
+        let dateValue = mcProfile.properties[birthdayPropertyIndex].value
 
         vBirthdayPicker.initPicker(date: {
             let hasSelectedDate = !dateValue.isEmpty
@@ -187,8 +196,8 @@ extension EditProfileViewController: ItemPickerDelegate {
         vSexPicker = ItemPickerView()
         vSexPicker.itemPickerDelegate = self
 
-        let sexValue = fruits.mcProfile.properties[getPropertyIndex(propertyType: .Sex)].value
-        vSexPicker.initPicker(items: fruits.mcProfile.sexTypes, selectedRow: Int(sexValue.isEmpty ? "0" : sexValue)!)
+        let sexValue = mcProfile.properties[getPropertyIndex(propertyType: .Sex)].value
+        vSexPicker.initPicker(items: mcProfile.sexTypes, selectedRow: Int(sexValue.isEmpty ? "0" : sexValue)!)
 
         view.addSubview(vSexPicker)
 
@@ -212,7 +221,7 @@ extension EditProfileViewController {
     func onBackButtonPressed() -> Bool {
         var hasChanges = false
 
-        for (index, property) in fruits.mcProfile.properties.enumerated() {
+        for (index, property) in mcProfile.properties.enumerated() {
             hasChanges = property.value != oldValues[index].value
             if (hasChanges) {
                 break
@@ -226,9 +235,9 @@ extension EditProfileViewController {
 
         // NOTE: workaround for crash on iOS 11:
         // Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: 'Override of -navigationBar:shouldPopItem: returned YES after manually popping a view controller
-        if #available(iOS 13, *){
+        if #available(iOS 13, *) {
             // do nothing
-        }else {
+        } else {
             hideEditProfileScreen()
         }
 
@@ -254,7 +263,7 @@ extension EditProfileViewController {
         }))
 
         vExitAlert.addAction(UIAlertAction(title: "Пропустить", style: .cancel, handler: { (action: UIAlertAction?) in
-            self.fruits.mcProfile.properties = self.oldValues
+            self.mcProfile.properties = self.oldValues
             self.hideEditProfileScreen()
         }))
 
@@ -271,7 +280,7 @@ extension EditProfileViewController {
 extension EditProfileViewController {
 
     func checkProperties() -> Bool {
-        for property in fruits.mcProfile.properties {
+        for property in mcProfile.properties {
             if (property.type != .Patronymic && property.value.isEmpty) {
                 return false
             }
@@ -302,7 +311,7 @@ extension EditProfileViewController {
 }
 
 // Pick User Photo
-extension EditProfileViewController : UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+extension EditProfileViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
 
     // Events
 

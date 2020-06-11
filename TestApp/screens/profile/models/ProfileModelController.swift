@@ -30,4 +30,14 @@ class ProfileModelController {
         Property(type: .Birthday, value: ""),
         Property(type: .Sex, value: ""),
     ]
+
+    func loadProfileProperties() {
+        let defaults = UserDefaults.standard
+
+        for (index, property) in properties.enumerated() {
+            if let value = defaults.string(forKey: property.type.rawValue) {
+                properties[index].value = value
+            }
+        }
+    }
 }

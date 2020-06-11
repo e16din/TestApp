@@ -16,6 +16,8 @@ class ProfileView: UIView,
     UITableViewDelegate,
     TextChangedProtocol {
 
+    var mcProfile: ProfileModelController
+
     var editModeEnabled = false
 
     let PROPERTY_CELL_IDENTIFIER = "cell"
@@ -33,7 +35,7 @@ class ProfileView: UIView,
             return ("Дата Рождения", isValueEmpty ? "Не указана" : propertyValue, true)
 
         case .Sex:
-            return ("Пол", fruits.mcProfile.sexTypes[Int(isValueEmpty ? "0" : propertyValue)!]!, true)
+            return ("Пол", mcProfile.sexTypes[Int(isValueEmpty ? "0" : propertyValue)!]!, true)
 
         case .Name:
             let emptyValue = editModeEnabled ? "" : "Не указано"
@@ -51,19 +53,20 @@ class ProfileView: UIView,
 
     // Events
 
-    override init(frame: CGRect) {
+    required init(frame: CGRect, mcProfile: ProfileModelController) {
+        self.mcProfile = mcProfile
         super.init(frame: frame)
 
         showView()
         showProfileProperties()
     }
 
-    required public init?(coder decoder: NSCoder) {
-        super.init(coder: decoder)
+    required init(coder: NSCoder) {
+        fatalError("Error: NSCoder is not supported")
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return fruits.mcProfile.properties.count
+        return mcProfile.properties.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -76,7 +79,7 @@ class ProfileView: UIView,
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch fruits.mcProfile.properties[indexPath.row].type {
+        switch mcProfile.properties[indexPath.row].type {
         case .Birthday:
             delegate?.onBirthdayPropertyClick()
         case .Sex:
@@ -124,7 +127,7 @@ class ProfileView: UIView,
         cell.cellDelegate = self
         cell.rowIndex = indexPath.row
 
-        let property = fruits.mcProfile.properties[indexPath.row]
+        let property = mcProfile.properties[indexPath.row]
 
         if property.type == .Sex || property.type == .Birthday {
             cell.isEditableProperty = false
@@ -140,13 +143,11 @@ class ProfileView: UIView,
     }
 
     func changePropertyValue(rowIndex: Int, text: String) {
-        let profile = fruits.mcProfile!
-
-        let property = profile.properties[rowIndex]
+        let property = mcProfile.properties[rowIndex]
 
         switch property.type {
         case .Name, .Surname, .Patronymic:
-            profile.properties[rowIndex].value = text
+            mcProfile.properties[rowIndex].value = text
 
         default:
             break
