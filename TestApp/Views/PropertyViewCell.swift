@@ -5,42 +5,45 @@
 
 import UIKit
 
-protocol TextChangedProtocol: class {
-    func onTextHeightChanged(cell: PropertyViewCell)
-    func onTextChanged(text: String, rowIndex: Int)
+protocol PropertyViewCellDelegate {
+    // Events
+    func propertyTextChanged(_ cell: PropertyViewCell, text: String, rowIndex: Int)
+
+    // Actions
+    func updatePropertyCellHeight(_ cell: PropertyViewCell)
 }
 
 class PropertyViewCell: UITableViewCell, UITextViewDelegate {
 
     let DEFAULT_WIDTH: CGFloat = UIScreen.main.bounds.width / 2
 
-    var vPropertyField: UITextView!
-    var vPropertyLabel: UILabel {
-        get {
-            return textLabel!
-        }
-    }
+    var delegate: PropertyViewCellDelegate?
 
-    weak var cellDelegate: TextChangedProtocol?
+    var rowIndex: Int!
 
     var isSingleLine = false
     var isEditableProperty = false
-    var rowIndex: Int!
+
+    var propertyLabelView: UILabel {
+        textLabel!
+    }
+    var propertyFieldView: UITextView!
+
 
     func updateCellHeight() {
-        let startHeight = vPropertyField.frame.size.height
-        let calcHeight = vPropertyField.sizeThatFits(vPropertyField.frame.size).height
+        let startHeight = propertyFieldView.frame.size.height
+        let calcHeight = propertyFieldView.sizeThatFits(propertyFieldView.frame.size).height
         print("startHeight: \(startHeight) | calcHeight: \(calcHeight)")
 
         let delta: CGFloat = 4
         if startHeight + delta < calcHeight || startHeight - delta > calcHeight {
             UIView.setAnimationsEnabled(false)
-            vPropertyField.sizeToFit()
-            if vPropertyField.frame.size.width < DEFAULT_WIDTH {
-                vPropertyField.frame.size.width = DEFAULT_WIDTH
+            propertyFieldView.sizeToFit()
+            if propertyFieldView.frame.size.width < DEFAULT_WIDTH {
+                propertyFieldView.frame.size.width = DEFAULT_WIDTH
             }
 
-            cellDelegate!.onTextHeightChanged(cell: self)
+            delegate?.updatePropertyCellHeight(self)
 
             UIView.setAnimationsEnabled(true)
         }
@@ -59,7 +62,7 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
 
     override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if (isEditableProperty) {
-            vPropertyField.becomeFirstResponder()
+            propertyFieldView.becomeFirstResponder()
 
         } else {
             super.touchesBegan(touches, with: event)
@@ -70,23 +73,23 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
         if !isSingleLine {
             updateCellHeight()
         }
-        cellDelegate!.onTextChanged(text: textView.text, rowIndex: rowIndex)
+        delegate?.propertyTextChanged(self, text: textView.text, rowIndex: rowIndex)
     }
 
     // Actions
 
     func showPropertyView() {
-        vPropertyField = UITextView(frame: CGRect(x: DEFAULT_WIDTH - 16, y: 8, width: DEFAULT_WIDTH, height: 40))
-        vPropertyField.delegate = self
-        vPropertyField.translatesAutoresizingMaskIntoConstraints = true
-        vPropertyField.textAlignment = .right
-        vPropertyField.textColor = .gray
-        vPropertyField.font = vPropertyLabel.font
+        propertyFieldView = UITextView(frame: CGRect(x: DEFAULT_WIDTH - 16, y: 8, width: DEFAULT_WIDTH, height: 40))
+        propertyFieldView.delegate = self
+        propertyFieldView.translatesAutoresizingMaskIntoConstraints = true
+        propertyFieldView.textAlignment = .right
+        propertyFieldView.textColor = .gray
+        propertyFieldView.font = propertyLabelView.font
 
-        contentView.addSubview(vPropertyField)
+        contentView.addSubview(propertyFieldView)
 
         let leftConstraint = NSLayoutConstraint(
-            item: vPropertyField,
+            item: propertyFieldView,
             attribute: .left,
             relatedBy: .equal,
             toItem: contentView,
@@ -95,7 +98,7 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
             constant: 50
         )
         let rightConstraint = NSLayoutConstraint(
-            item: vPropertyField,
+            item: propertyFieldView,
             attribute: .right,
             relatedBy: .equal,
             toItem: contentView,
@@ -104,7 +107,7 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
             constant: -16
         )
         let topConstraint = NSLayoutConstraint(
-            item: vPropertyField,
+            item: propertyFieldView,
             attribute: .top,
             relatedBy: .equal,
             toItem: contentView,
@@ -113,7 +116,7 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
             constant: 8
         )
         let bottomConstraint = NSLayoutConstraint(
-            item: vPropertyField,
+            item: propertyFieldView,
             attribute: .bottom,
             relatedBy: .equal,
             toItem: contentView,
@@ -125,21 +128,21 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
         contentView.addConstraints([leftConstraint, rightConstraint, topConstraint, bottomConstraint])
     }
 
-    func updatePropertyView(values: (name: String, value: String, isSingleLine: Bool)) {
-        vPropertyLabel.text = values.name
-        vPropertyField.text = values.value
+    func updateCell(values: (name: String, value: String, isSingleLine: Bool)) {
+        propertyLabelView.text = values.name
+        propertyFieldView.text = values.value
         isSingleLine = values.isSingleLine
 
         if isSingleLine {
-            vPropertyField.textContainer.maximumNumberOfLines = 1
+            propertyFieldView.textContainer.maximumNumberOfLines = 1
 
         } else {
-            vPropertyField.textContainer.maximumNumberOfLines = 30
+            propertyFieldView.textContainer.maximumNumberOfLines = 30
             updateCellHeight()
         }
 
-        vPropertyField.isEditable = isEditableProperty
-        vPropertyField.isUserInteractionEnabled = isEditableProperty
-        vPropertyField.textContainer.lineBreakMode = isEditableProperty ? .byTruncatingHead : .byTruncatingTail
+        propertyFieldView.isEditable = isEditableProperty
+        propertyFieldView.isUserInteractionEnabled = isEditableProperty
+        propertyFieldView.textContainer.lineBreakMode = isEditableProperty ? .byTruncatingHead : .byTruncatingTail
     }
 }

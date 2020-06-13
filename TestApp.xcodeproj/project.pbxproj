@@ -8,18 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		7108301FD7E5B80BB50313CF /* Templates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083A3DCA435294D5937C21 /* Templates.swift */; };
+		7108306C9E699DD200C5F14C /* DatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083E52FB8A7DBD096E9CE4 /* DatePickerView.swift */; };
+		71083245859E941FA4A19AD7 /* AddSelectCancelToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083A0640A89995DCE859E3 /* AddSelectCancelToolbar.swift */; };
+		710832C4FD3AAFBB8A87387C /* ProfileModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7108353E32BB3581EEF8C47A /* ProfileModelController.swift */; };
 		710832EDA40A1A459C705D50 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083A83D7A826388B21A411 /* ProfileViewController.swift */; };
+		71083301E40F8D2BF647C92B /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710839CBE2BE953F67A7155D /* EditProfileViewController.swift */; };
 		710833713F8FC4FE4D2D6258 /* PrefactoringRefactoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710832B37E3BD62D5DFF400E /* PrefactoringRefactoring.swift */; };
-		710833F4539330D909C34864 /* PropertyViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083E00B90D9FD8355D8378 /* PropertyViewCell.swift */; };
-		7108345CB4FFB6456F767DD0 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083D0A8F18198D46001493 /* ProfileView.swift */; };
-		7108372593B91FA9EFE6C0F4 /* ProfileModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083F029B33EC1E0AC05CE5 /* ProfileModelController.swift */; };
+		710835308F872BB80E7481D2 /* PropertyViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083BD5FD62E1E2B2883255 /* PropertyViewCell.swift */; };
 		710837CFDA16AE159E07FEF8 /* PrefactoringUserPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083B09B1BE72A8ED75674A /* PrefactoringUserPhoto.swift */; };
-		71083851B1548B977EBFAEEA /* DatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7108387B3A1AFAAEAD424A3D /* DatePickerView.swift */; };
-		71083971F2DA3A572E8DA39F /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083898755E027E99B9D353 /* EditProfileViewController.swift */; };
+		710837F7D5597331AC333B9A /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083BAA14478EF14280A664 /* Profile.swift */; };
+		710838AB245241CDEA558695 /* AddOutsideStubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083DF9301D439E28891F79 /* AddOutsideStubView.swift */; };
+		710839ABB9AA87CE07C38397 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083B2B94C1662E326CDAE6 /* Dictionary.swift */; };
 		710839EBE0C4EF50E4758AE9 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083A56130C84C05EF6630D /* Date.swift */; };
 		71083A4FBBC1F9CF33E23383 /* PrefactoringEditProfileOnBackClick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7108367545A88851DEE8FCAD /* PrefactoringEditProfileOnBackClick.swift */; };
+		71083B6432140D44C8F41FBA /* ItemPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083338BBCECF434A3E4081 /* ItemPickerView.swift */; };
 		71083C57BE27C56AA7D0ADA0 /* PrefactoringEditProfileOnSaveClick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083AD20E76503428676DEA /* PrefactoringEditProfileOnSaveClick.swift */; };
-		71083CD69C43507511D81DF7 /* ItemPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083625CD79EAB752DB8859 /* ItemPickerView.swift */; };
+		71083E3CE8092CA9A0B73DAE /* EditProfileModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710835A7EC2553155F6A48B1 /* EditProfileModelController.swift */; };
 		75195C182422419E00BF8E6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75195C172422419E00BF8E6F /* Assets.xcassets */; };
 		75195C23242243EB00BF8E6F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75195C0E2422419C00BF8E6F /* AppDelegate.swift */; };
 		75B5E08C2422690800D76E6C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75B5E08B2422690800D76E6C /* Launch Screen.storyboard */; };
@@ -30,18 +34,22 @@
 		2495F16CDEDD669D6A39BABA /* Pods-TestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.release.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.release.xcconfig"; sourceTree = "<group>"; };
 		58184AEF9CA5E31CAC22DC0B /* Pods-TestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.debug.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.debug.xcconfig"; sourceTree = "<group>"; };
 		710832B37E3BD62D5DFF400E /* PrefactoringRefactoring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefactoringRefactoring.swift; sourceTree = "<group>"; };
-		71083625CD79EAB752DB8859 /* ItemPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemPickerView.swift; sourceTree = "<group>"; };
+		71083338BBCECF434A3E4081 /* ItemPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemPickerView.swift; sourceTree = "<group>"; };
+		7108353E32BB3581EEF8C47A /* ProfileModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileModelController.swift; sourceTree = "<group>"; };
+		710835A7EC2553155F6A48B1 /* EditProfileModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileModelController.swift; sourceTree = "<group>"; };
 		7108367545A88851DEE8FCAD /* PrefactoringEditProfileOnBackClick.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefactoringEditProfileOnBackClick.swift; sourceTree = "<group>"; };
-		7108387B3A1AFAAEAD424A3D /* DatePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerView.swift; sourceTree = "<group>"; };
-		71083898755E027E99B9D353 /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
+		710839CBE2BE953F67A7155D /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
+		71083A0640A89995DCE859E3 /* AddSelectCancelToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSelectCancelToolbar.swift; sourceTree = "<group>"; };
 		71083A3DCA435294D5937C21 /* Templates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Templates.swift; sourceTree = "<group>"; };
 		71083A56130C84C05EF6630D /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		71083A83D7A826388B21A411 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		71083AD20E76503428676DEA /* PrefactoringEditProfileOnSaveClick.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefactoringEditProfileOnSaveClick.swift; sourceTree = "<group>"; };
 		71083B09B1BE72A8ED75674A /* PrefactoringUserPhoto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefactoringUserPhoto.swift; sourceTree = "<group>"; };
-		71083D0A8F18198D46001493 /* ProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
-		71083E00B90D9FD8355D8378 /* PropertyViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyViewCell.swift; sourceTree = "<group>"; };
-		71083F029B33EC1E0AC05CE5 /* ProfileModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileModelController.swift; sourceTree = "<group>"; };
+		71083B2B94C1662E326CDAE6 /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
+		71083BAA14478EF14280A664 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		71083BD5FD62E1E2B2883255 /* PropertyViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyViewCell.swift; sourceTree = "<group>"; };
+		71083DF9301D439E28891F79 /* AddOutsideStubView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddOutsideStubView.swift; sourceTree = "<group>"; };
+		71083E52FB8A7DBD096E9CE4 /* DatePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerView.swift; sourceTree = "<group>"; };
 		75195C0B2422419C00BF8E6F /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75195C0E2422419C00BF8E6F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75195C172422419E00BF8E6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = TestApp/Assets.xcassets; sourceTree = SOURCE_ROOT; };
@@ -71,45 +79,41 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		7108301E22267ACD60637541 /* views */ = {
-			isa = PBXGroup;
-			children = (
-				71083E00B90D9FD8355D8378 /* PropertyViewCell.swift */,
-				71083D0A8F18198D46001493 /* ProfileView.swift */,
-				7108387B3A1AFAAEAD424A3D /* DatePickerView.swift */,
-				71083625CD79EAB752DB8859 /* ItemPickerView.swift */,
-			);
-			path = views;
-			sourceTree = "<group>";
-		};
-		710831F5F6F9197477B9AF02 /* support */ = {
+		710831F5F6F9197477B9AF02 /* Support */ = {
 			isa = PBXGroup;
 			children = (
 				71083A3DCA435294D5937C21 /* Templates.swift */,
 			);
-			path = support;
+			path = Support;
 			sourceTree = "<group>";
 		};
-		710835975EA636FFF619911E /* profile */ = {
+		710835210CCB80E621F7B0CB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				71083BAA14478EF14280A664 /* Profile.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		710835975EA636FFF619911E /* Profile */ = {
 			isa = PBXGroup;
 			children = (
 				71083A83D7A826388B21A411 /* ProfileViewController.swift */,
-				7108301E22267ACD60637541 /* views */,
-				7108375C4D8257199F074811 /* models */,
-				71083898755E027E99B9D353 /* EditProfileViewController.swift */,
+				7108353E32BB3581EEF8C47A /* ProfileModelController.swift */,
 			);
-			path = profile;
+			path = Profile;
 			sourceTree = "<group>";
 		};
-		710836A034E924BFF3255DF3 /* extensions */ = {
+		710836A034E924BFF3255DF3 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				71083A56130C84C05EF6630D /* Date.swift */,
+				71083B2B94C1662E326CDAE6 /* Dictionary.swift */,
 			);
-			path = extensions;
+			path = Extensions;
 			sourceTree = "<group>";
 		};
-		7108370268A017B1D0F286F3 /* prefactoring */ = {
+		7108370268A017B1D0F286F3 /* Prefactoring */ = {
 			isa = PBXGroup;
 			children = (
 				7108367545A88851DEE8FCAD /* PrefactoringEditProfileOnBackClick.swift */,
@@ -117,23 +121,37 @@
 				71083B09B1BE72A8ED75674A /* PrefactoringUserPhoto.swift */,
 				710832B37E3BD62D5DFF400E /* PrefactoringRefactoring.swift */,
 			);
-			path = prefactoring;
+			path = Prefactoring;
 			sourceTree = "<group>";
 		};
-		7108375C4D8257199F074811 /* models */ = {
+		71083DAF92F0822F9BDF2877 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				71083F029B33EC1E0AC05CE5 /* ProfileModelController.swift */,
+				710835975EA636FFF619911E /* Profile */,
+				71083F9C4867F8AA5A1B53A6 /* EditProfile */,
 			);
-			path = models;
+			path = Controllers;
 			sourceTree = "<group>";
 		};
-		71083DAF92F0822F9BDF2877 /* screens */ = {
+		71083F33C606B1D46890D76E /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				710835975EA636FFF619911E /* profile */,
+				71083BD5FD62E1E2B2883255 /* PropertyViewCell.swift */,
+				71083E52FB8A7DBD096E9CE4 /* DatePickerView.swift */,
+				71083338BBCECF434A3E4081 /* ItemPickerView.swift */,
+				71083A0640A89995DCE859E3 /* AddSelectCancelToolbar.swift */,
+				71083DF9301D439E28891F79 /* AddOutsideStubView.swift */,
 			);
-			path = screens;
+			path = Views;
+			sourceTree = "<group>";
+		};
+		71083F9C4867F8AA5A1B53A6 /* EditProfile */ = {
+			isa = PBXGroup;
+			children = (
+				710835A7EC2553155F6A48B1 /* EditProfileModelController.swift */,
+				710839CBE2BE953F67A7155D /* EditProfileViewController.swift */,
+			);
+			path = EditProfile;
 			sourceTree = "<group>";
 		};
 		75195C022422419C00BF8E6F = {
@@ -162,10 +180,12 @@
 				75195C0E2422419C00BF8E6F /* AppDelegate.swift */,
 				75195C172422419E00BF8E6F /* Assets.xcassets */,
 				75195C1C2422419E00BF8E6F /* Info.plist */,
-				71083DAF92F0822F9BDF2877 /* screens */,
-				710836A034E924BFF3255DF3 /* extensions */,
-				7108370268A017B1D0F286F3 /* prefactoring */,
-				710831F5F6F9197477B9AF02 /* support */,
+				71083DAF92F0822F9BDF2877 /* Controllers */,
+				710836A034E924BFF3255DF3 /* Extensions */,
+				7108370268A017B1D0F286F3 /* Prefactoring */,
+				710831F5F6F9197477B9AF02 /* Support */,
+				71083F33C606B1D46890D76E /* Views */,
+				710835210CCB80E621F7B0CB /* Models */,
 			);
 			path = TestApp;
 			sourceTree = "<group>";
@@ -294,18 +314,22 @@
 			files = (
 				75195C23242243EB00BF8E6F /* AppDelegate.swift in Sources */,
 				710832EDA40A1A459C705D50 /* ProfileViewController.swift in Sources */,
-				710833F4539330D909C34864 /* PropertyViewCell.swift in Sources */,
-				7108345CB4FFB6456F767DD0 /* ProfileView.swift in Sources */,
-				7108372593B91FA9EFE6C0F4 /* ProfileModelController.swift in Sources */,
-				71083851B1548B977EBFAEEA /* DatePickerView.swift in Sources */,
-				71083CD69C43507511D81DF7 /* ItemPickerView.swift in Sources */,
 				71083A4FBBC1F9CF33E23383 /* PrefactoringEditProfileOnBackClick.swift in Sources */,
 				71083C57BE27C56AA7D0ADA0 /* PrefactoringEditProfileOnSaveClick.swift in Sources */,
 				710837CFDA16AE159E07FEF8 /* PrefactoringUserPhoto.swift in Sources */,
-				71083971F2DA3A572E8DA39F /* EditProfileViewController.swift in Sources */,
 				710839EBE0C4EF50E4758AE9 /* Date.swift in Sources */,
 				710833713F8FC4FE4D2D6258 /* PrefactoringRefactoring.swift in Sources */,
 				7108301FD7E5B80BB50313CF /* Templates.swift in Sources */,
+				710832C4FD3AAFBB8A87387C /* ProfileModelController.swift in Sources */,
+				71083E3CE8092CA9A0B73DAE /* EditProfileModelController.swift in Sources */,
+				71083301E40F8D2BF647C92B /* EditProfileViewController.swift in Sources */,
+				710835308F872BB80E7481D2 /* PropertyViewCell.swift in Sources */,
+				7108306C9E699DD200C5F14C /* DatePickerView.swift in Sources */,
+				71083B6432140D44C8F41FBA /* ItemPickerView.swift in Sources */,
+				710837F7D5597331AC333B9A /* Profile.swift in Sources */,
+				710839ABB9AA87CE07C38397 /* Dictionary.swift in Sources */,
+				71083245859E941FA4A19AD7 /* AddSelectCancelToolbar.swift in Sources */,
+				710838AB245241CDEA558695 /* AddOutsideStubView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
