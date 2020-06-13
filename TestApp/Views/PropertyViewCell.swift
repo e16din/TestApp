@@ -19,13 +19,13 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
 
     var delegate: PropertyViewCellDelegate?
 
-    var rowIndex: Int!
+    var rowIndex = 0
 
     var isSingleLine = false
     var isEditableProperty = false
 
-    var propertyLabelView: UILabel {
-        textLabel!
+    var propertyLabelView: UILabel? {
+        textLabel
     }
     var propertyFieldView: UITextView!
 
@@ -84,7 +84,7 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
         propertyFieldView.translatesAutoresizingMaskIntoConstraints = true
         propertyFieldView.textAlignment = .right
         propertyFieldView.textColor = .gray
-        propertyFieldView.font = propertyLabelView.font
+        propertyFieldView.font = propertyLabelView?.font
 
         contentView.addSubview(propertyFieldView)
 
@@ -129,7 +129,7 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
     }
 
     func updateCell(values: (name: String, value: String, isSingleLine: Bool)) {
-        propertyLabelView.text = values.name
+        propertyLabelView?.text = values.name
         propertyFieldView.text = values.value
         isSingleLine = values.isSingleLine
 

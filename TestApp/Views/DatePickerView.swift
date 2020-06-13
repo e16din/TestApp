@@ -18,7 +18,7 @@ class DatePickerView: UIView,
     SelectCancelToolbarDelegate,
     OutsideStubViewDelegate {
 
-    var delegate: DatePickerDelegate!
+    var delegate: DatePickerDelegate?
 
     var datePicker: UIDatePicker!
     var toolBar: UIToolbar!
@@ -39,23 +39,23 @@ class DatePickerView: UIView,
     }
 
     @objc func dateSelected() {
-        delegate.dateSelected(self, selectedDate: datePicker.date)
+        delegate?.dateSelected(self, selectedDate: datePicker.date)
     }
 
     @objc func dateChanged() {
-        delegate.dateChanged(self, date: datePicker.date)
+        delegate?.dateChanged(self, date: datePicker.date)
     }
 
     func toolbarSelectButtonPressed() {
-        delegate.dateSelected(self, selectedDate: datePicker.date)
+        delegate?.dateSelected(self, selectedDate: datePicker.date)
     }
 
     func toolbarCancelButtonPressed() {
-        delegate.cancelDatePicker()
+        delegate?.cancelDatePicker()
     }
 
     func outsideStubPressed() {
-        delegate.cancelDatePicker()
+        delegate?.cancelDatePicker()
     }
 
     // Actions

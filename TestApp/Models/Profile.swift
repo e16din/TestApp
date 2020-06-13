@@ -49,6 +49,6 @@ class Profile {
     }
 
     func getPropertyIndex(name: Property.Name) -> Int {
-        properties.firstIndex(where: { $0.name == name })!
+        properties.firstIndex(where: { $0.name == name }) ?? -1
     }
 }
