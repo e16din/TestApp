@@ -30,25 +30,6 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
     var propertyFieldView: UITextView!
 
 
-    func updateCellHeight() {
-        let startHeight = propertyFieldView.frame.size.height
-        let calcHeight = propertyFieldView.sizeThatFits(propertyFieldView.frame.size).height
-        print("startHeight: \(startHeight) | calcHeight: \(calcHeight)")
-
-        let delta: CGFloat = 4
-        if startHeight + delta < calcHeight || startHeight - delta > calcHeight {
-            UIView.setAnimationsEnabled(false)
-            propertyFieldView.sizeToFit()
-            if propertyFieldView.frame.size.width < DEFAULT_WIDTH {
-                propertyFieldView.frame.size.width = DEFAULT_WIDTH
-            }
-
-            delegate?.updatePropertyCellHeight(self)
-
-            UIView.setAnimationsEnabled(true)
-        }
-    }
-
     // Events
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -73,13 +54,15 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
         if !isSingleLine {
             updateCellHeight()
         }
+
         delegate?.propertyTextChanged(self, text: textView.text, rowIndex: rowIndex)
     }
 
     // Actions
 
     func showPropertyView() {
-        propertyFieldView = UITextView(frame: CGRect(x: DEFAULT_WIDTH - 16, y: 8, width: DEFAULT_WIDTH, height: 40))
+        let frame = CGRect(x: DEFAULT_WIDTH - 16, y: 8, width: DEFAULT_WIDTH, height: 40)
+        propertyFieldView = UITextView(frame: frame)
         propertyFieldView.delegate = self
         propertyFieldView.translatesAutoresizingMaskIntoConstraints = true
         propertyFieldView.textAlignment = .right
@@ -144,5 +127,24 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
         propertyFieldView.isEditable = isEditableProperty
         propertyFieldView.isUserInteractionEnabled = isEditableProperty
         propertyFieldView.textContainer.lineBreakMode = isEditableProperty ? .byTruncatingHead : .byTruncatingTail
+    }
+
+    func updateCellHeight() {
+        let startHeight = propertyFieldView.frame.size.height
+        let calcHeight = propertyFieldView.sizeThatFits(propertyFieldView.frame.size).height
+        print("startHeight: \(startHeight) | calcHeight: \(calcHeight)")
+
+        let delta = CGFloat(4)
+        if startHeight + delta < calcHeight || startHeight - delta > calcHeight {
+            UIView.setAnimationsEnabled(false)
+            propertyFieldView.sizeToFit()
+            if propertyFieldView.frame.size.width < DEFAULT_WIDTH {
+                propertyFieldView.frame.size.width = DEFAULT_WIDTH
+            }
+
+            delegate?.updatePropertyCellHeight(self)
+
+            UIView.setAnimationsEnabled(true)
+        }
     }
 }

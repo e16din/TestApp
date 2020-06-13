@@ -11,7 +11,7 @@ import UIKit
 
 class ProfileViewController: UIViewController {
 
-    let PROPERTY_CELL_IDENTIFIER = "cell"
+    let PROFILE_PROPERTY_CELL = "PROFILE_PROPERTY_CELL"
 
     var profileModelController: ProfileModelController
 
@@ -19,8 +19,8 @@ class ProfileViewController: UIViewController {
 
     // Events
 
-    required init(_ mc: ProfileModelController) {
-        profileModelController = mc
+    required init(_ modelController: ProfileModelController) {
+        profileModelController = modelController
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -75,7 +75,7 @@ class ProfileViewController: UIViewController {
         propertiesTableView.delegate = self
         propertiesTableView.dataSource = self
         propertiesTableView.translatesAutoresizingMaskIntoConstraints = false
-        propertiesTableView.register(PropertyViewCell.self, forCellReuseIdentifier: PROPERTY_CELL_IDENTIFIER)
+        propertiesTableView.register(PropertyViewCell.self, forCellReuseIdentifier: PROFILE_PROPERTY_CELL)
         view.addSubview(propertiesTableView)
 
         propertiesTableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
@@ -99,7 +99,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     // Events
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PROPERTY_CELL_IDENTIFIER) as! PropertyViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: PROFILE_PROPERTY_CELL) as! PropertyViewCell
 
         showPropertyCell(cell: cell, indexPath: indexPath)
 

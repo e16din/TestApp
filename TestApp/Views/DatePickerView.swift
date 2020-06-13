@@ -38,11 +38,7 @@ class DatePickerView: UIView,
         fatalError("Error: NSCoder is not supported")
     }
 
-    @objc func dateSelected() {
-        delegate?.dateSelected(self, selectedDate: datePicker.date)
-    }
-
-    @objc func dateChanged() {
+    @objc func pickerDateChanged() {
         delegate?.dateChanged(self, date: datePicker.date)
     }
 
@@ -68,7 +64,7 @@ class DatePickerView: UIView,
         datePicker.date = date
         datePicker.maximumDate = Date()
 
-        datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
+        datePicker.addTarget(self, action: #selector(pickerDateChanged), for: .valueChanged)
 
         addSubview(datePicker)
 
@@ -85,6 +81,6 @@ class DatePickerView: UIView,
 
     func showOutsideStubView() {
         outsideStubView = AddOutsideStubView()
-            .addTo(self, bottomView: datePicker, delegate: self)
+            .addTo(self, bottomView: toolBar, delegate: self)
     }
 }

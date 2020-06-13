@@ -122,4 +122,16 @@ class EditProfileModelController {
     func getPropertiesCount() -> Int {
         profile.properties.count
     }
+
+    func isClickableProperty(_ index: Int) -> Bool {
+        let propertyName = profile.properties[index].name
+
+        switch propertyName {
+        case .Birthday, .Sex:
+            return true
+        default:
+            return false
+        }
+
+    }
 }

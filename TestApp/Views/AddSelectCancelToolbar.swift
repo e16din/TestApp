@@ -15,7 +15,7 @@ class AddSelectCancelToolbar {
 
     func addTo(_ view: UIView, bottomView: UIView, delegate: SelectCancelToolbarDelegate?) -> UIToolbar {
         var toolBar = UIToolbar()
-        let doneButton = UIBarButtonItem(title: "Выбрать", style: .plain, target: self,
+        let doneButton = UIBarButtonItem(title: "Выбрать", style: .plain, target: delegate,
             action: #selector(delegate?.toolbarSelectButtonPressed));
         let cancelButton = UIBarButtonItem(title: "Отмена", style: .plain, target: delegate,
             action: #selector(delegate?.toolbarCancelButtonPressed));

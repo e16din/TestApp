@@ -11,7 +11,7 @@ import UIKit
 
 class EditProfileViewController: UIViewController {
 
-    let PROPERTY_CELL_IDENTIFIER = "cell"
+    let EDIT_PROFILE_PROPERTY_CELL = "EDIT_PROFILE_PROPERTY_CELL"
 
     var editProfileModelController: EditProfileModelController
 
@@ -25,8 +25,8 @@ class EditProfileViewController: UIViewController {
 
     // Events
 
-    required init(_ mc: EditProfileModelController) {
-        editProfileModelController = mc
+    required init(_ modelController: EditProfileModelController) {
+        editProfileModelController = modelController
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -84,7 +84,7 @@ class EditProfileViewController: UIViewController {
         propertiesTableView.delegate = self
         propertiesTableView.dataSource = self
         propertiesTableView.translatesAutoresizingMaskIntoConstraints = false
-        propertiesTableView.register(PropertyViewCell.self, forCellReuseIdentifier: PROPERTY_CELL_IDENTIFIER)
+        propertiesTableView.register(PropertyViewCell.self, forCellReuseIdentifier: EDIT_PROFILE_PROPERTY_CELL)
         view.addSubview(propertiesTableView)
 
         propertiesTableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
@@ -138,9 +138,9 @@ extension EditProfileViewController: UITableViewDataSource, UITableViewDelegate 
     // Events
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PROPERTY_CELL_IDENTIFIER) as! PropertyViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: EDIT_PROFILE_PROPERTY_CELL) as! PropertyViewCell
 
-        showPropertyCell(cell: cell, indexPath: indexPath)
+        showPropertyCell(cell: cell, index: indexPath.row)
 
         return cell
     }
@@ -161,14 +161,15 @@ extension EditProfileViewController: UITableViewDataSource, UITableViewDelegate 
 
     // Actions
 
-    func showPropertyCell(cell: PropertyViewCell, indexPath: IndexPath) {
+    func showPropertyCell(cell: PropertyViewCell, index: Int) {
         cell.selectionStyle = .none
-        cell.rowIndex = indexPath.row
-        cell.isEditableProperty = true
+        cell.rowIndex = index
+
+        cell.isEditableProperty = !editProfileModelController.isClickableProperty(index)
 
         cell.delegate = self
 
-        let propertyData = editProfileModelController.makeDataForPropertyCell(index: indexPath.row)
+        let propertyData = editProfileModelController.makeDataForPropertyCell(index: index)
         cell.updateCell(values: propertyData)
     }
 
