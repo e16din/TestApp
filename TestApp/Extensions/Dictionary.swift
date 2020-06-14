@@ -6,7 +6,7 @@
 import Foundation
 
 extension Dictionary {
-    subscript(i: Int) -> (key: Key, value: Value) {
-        return self[self.index(startIndex, offsetBy: i)]
+    subscript(_ i: Int) -> (key: Key, value: Value) {
+        self[self.index(startIndex, offsetBy: i)]
     }
 }

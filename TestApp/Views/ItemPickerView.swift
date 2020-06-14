@@ -6,11 +6,11 @@
 import UIKit
 
 @objc protocol ItemPickerDelegate {
-    // Events
+    // MARK: - Events
     func itemChanged(_ view: ItemPickerView, index: Int)
     func itemSelected(_ view: ItemPickerView, index: Int)
 
-    // Actions
+    // MARK: - Actions
     func cancelItemPicker()
 }
 
@@ -26,7 +26,7 @@ class ItemPickerView: UIView, SelectCancelToolbarDelegate, OutsideStubViewDelega
     var toolBar: UIToolbar!
     var outsideStubView: UIView!
 
-    // Events
+    // MARK: - Events
 
     init(_ items: [Int: String], selectedRow: Int) {
         super.init(frame: CGRect())
@@ -59,7 +59,7 @@ class ItemPickerView: UIView, SelectCancelToolbarDelegate, OutsideStubViewDelega
         delegate?.cancelItemPicker()
     }
 
-    // Actions
+    // MARK: - Actions
 
     func showItemPicker(selectedRow: Int) {
         pickerView = UIPickerView()
@@ -92,18 +92,18 @@ class ItemPickerView: UIView, SelectCancelToolbarDelegate, OutsideStubViewDelega
 extension ItemPickerView: UIPickerViewDataSource, UIPickerViewDelegate {
 
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
+        1
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return items.count
+        items.count
     }
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return items[row]
+        items[row]
     }
 
-    // Events
+    // MARK: - Events
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         selectedRow = row

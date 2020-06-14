@@ -22,21 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    private func showProfileScreen() {
-        let profile = makeEmptyProfile()
+    func showProfileScreen() {
+        let profile = Profile()
         let profileModelController = ProfileModelController(profile)
         let profileViewController = ProfileViewController(profileModelController)
         window?.rootViewController = UINavigationController(rootViewController: profileViewController)
         window?.makeKeyAndVisible()
     }
 
-    private func makeEmptyProfile() -> Profile {
-        Profile([
-            Profile.Property(name: .Name, value: ""),
-            Profile.Property(name: .Surname, value: ""),
-            Profile.Property(name: .Patronymic, value: ""),
-            Profile.Property(name: .Birthday, value: ""),
-            Profile.Property(name: .Sex, value: ""),
-        ])
-    }
 }

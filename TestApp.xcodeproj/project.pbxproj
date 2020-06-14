@@ -20,6 +20,7 @@
 		710838AB245241CDEA558695 /* AddOutsideStubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083DF9301D439E28891F79 /* AddOutsideStubView.swift */; };
 		710839ABB9AA87CE07C38397 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083B2B94C1662E326CDAE6 /* Dictionary.swift */; };
 		710839EBE0C4EF50E4758AE9 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083A56130C84C05EF6630D /* Date.swift */; };
+		710839EFD4F0420F4FC93A4A /* SexTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710834D226EB4EFDFF8010B3 /* SexTypes.swift */; };
 		71083A4FBBC1F9CF33E23383 /* PrefactoringEditProfileOnBackClick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7108367545A88851DEE8FCAD /* PrefactoringEditProfileOnBackClick.swift */; };
 		71083B6432140D44C8F41FBA /* ItemPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083338BBCECF434A3E4081 /* ItemPickerView.swift */; };
 		71083C57BE27C56AA7D0ADA0 /* PrefactoringEditProfileOnSaveClick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083AD20E76503428676DEA /* PrefactoringEditProfileOnSaveClick.swift */; };
@@ -35,6 +36,7 @@
 		58184AEF9CA5E31CAC22DC0B /* Pods-TestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.debug.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.debug.xcconfig"; sourceTree = "<group>"; };
 		710832B37E3BD62D5DFF400E /* PrefactoringRefactoring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefactoringRefactoring.swift; sourceTree = "<group>"; };
 		71083338BBCECF434A3E4081 /* ItemPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemPickerView.swift; sourceTree = "<group>"; };
+		710834D226EB4EFDFF8010B3 /* SexTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SexTypes.swift; sourceTree = "<group>"; };
 		7108353E32BB3581EEF8C47A /* ProfileModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileModelController.swift; sourceTree = "<group>"; };
 		710835A7EC2553155F6A48B1 /* EditProfileModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileModelController.swift; sourceTree = "<group>"; };
 		7108367545A88851DEE8FCAD /* PrefactoringEditProfileOnBackClick.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefactoringEditProfileOnBackClick.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				71083BAA14478EF14280A664 /* Profile.swift */,
+				710834D226EB4EFDFF8010B3 /* SexTypes.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 				710839ABB9AA87CE07C38397 /* Dictionary.swift in Sources */,
 				71083245859E941FA4A19AD7 /* AddSelectCancelToolbar.swift in Sources */,
 				710838AB245241CDEA558695 /* AddOutsideStubView.swift in Sources */,
+				710839EFD4F0420F4FC93A4A /* SexTypes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

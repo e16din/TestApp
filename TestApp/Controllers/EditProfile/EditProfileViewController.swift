@@ -23,7 +23,7 @@ class EditProfileViewController: UIViewController {
 
     var exitAlert: UIAlertController!
 
-    // Events
+    // MARK: - Events
 
     required init(_ modelController: EditProfileModelController) {
         editProfileModelController = modelController
@@ -47,7 +47,11 @@ class EditProfileViewController: UIViewController {
             showValidationFailedAlert()
 
         } else {
-            editProfileModelController.saveProfileProperties()
+            do {
+                try editProfileModelController.saveProfile()
+            } catch {
+                print("Error: saveProfile()")
+            }
         }
     }
 
@@ -61,7 +65,7 @@ class EditProfileViewController: UIViewController {
         hideEditProfileScreen()
     }
 
-    // Actions
+    // MARK: - Actions
 
     func showView() {
         view.backgroundColor = .white
@@ -110,7 +114,11 @@ class EditProfileViewController: UIViewController {
                 self.showValidationFailedAlert()
 
             } else {
-                self.editProfileModelController.saveProfileProperties()
+                do {
+                    try self.editProfileModelController.saveProfile()
+                } catch {
+                    print("Error: saveProfile()")
+                }
                 self.hideEditProfileScreen()
             }
         }))
@@ -135,7 +143,7 @@ extension EditProfileViewController: UITableViewDataSource, UITableViewDelegate 
         editProfileModelController.getPropertiesCount()
     }
 
-    // Events
+    // MARK: - Events
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: EDIT_PROFILE_PROPERTY_CELL) as! PropertyViewCell
@@ -146,7 +154,7 @@ extension EditProfileViewController: UITableViewDataSource, UITableViewDelegate 
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let propertyName = editProfileModelController.profile.properties[indexPath.row].name
+        let propertyName = editProfileModelController.getPropertyType(indexPath.row)
 
         switch propertyName {
         case .Birthday:
@@ -159,28 +167,27 @@ extension EditProfileViewController: UITableViewDataSource, UITableViewDelegate 
         }
     }
 
-    // Actions
+    // MARK: - Actions
 
     func showPropertyCell(cell: PropertyViewCell, index: Int) {
         cell.selectionStyle = .none
         cell.rowIndex = index
-
-        cell.isEditableProperty = !editProfileModelController.isClickableProperty(index)
+        cell.isEditableProperty = true
 
         cell.delegate = self
 
-        let propertyData = editProfileModelController.makeDataForPropertyCell(index: index)
-        cell.updateCell(values: propertyData)
+        let cellData = editProfileModelController.getPropertyCellData(index: index)
+        cell.updateCell(cellData)
     }
 
-    func reloadPropertyCell(_ name: Profile.Property.Name) {
-        let propertyIndex = editProfileModelController.getPropertyIndex(name)
-        propertiesTableView.reloadRows(at: [IndexPath(item: propertyIndex, section: 0)], with: .none)
+    func reloadPropertyCell(_ type: Profile.PropertyType) {
+        let index = editProfileModelController.getPropertyIndex(type)
+        propertiesTableView.reloadRows(at: [IndexPath(item: index, section: 0)], with: .none)
     }
 
     func showBirthdayPicker() {
         if birthdayPicker != nil && birthdayPicker.isDescendant(of: view) {
-            print("The vBirthdayPicker is always shown")
+            print("The birthdayPicker is always shown")
             return
         }
 
@@ -212,7 +219,7 @@ extension EditProfileViewController: UITableViewDataSource, UITableViewDelegate 
         }
 
         let sexValue = editProfileModelController.getPropertyValue(.Sex)
-        let sexTypes = Profile.SexTypes().sexTypes
+        let sexTypes = SexTypes().sexTypes
         sexPicker = ItemPickerView(sexTypes, selectedRow: Int(sexValue) ?? 0)
         sexPicker.delegate = self
 
@@ -226,16 +233,16 @@ extension EditProfileViewController: UITableViewDataSource, UITableViewDelegate 
     }
 }
 
-// MARK: - PropertyViewCellDelegate
+// MARK: - PropertyViewCellDelegate | Change Name
 extension EditProfileViewController: PropertyViewCellDelegate {
 
-    // Events
+    // MARK: - Events
 
     func propertyTextChanged(_ cell: PropertyViewCell, text: String, rowIndex: Int) {
         editProfileModelController.updateProperty(rowIndex, value: text)
     }
 
-    // Actions
+    // MARK: - Actions
 
     func updatePropertyCellHeight(_ cell: PropertyViewCell) {
         propertiesTableView.beginUpdates()
@@ -244,10 +251,10 @@ extension EditProfileViewController: PropertyViewCellDelegate {
 
 }
 
-// MARK: - Pick Birthday
+// MARK: - DatePickerDelegate | Pick Birthday
 extension EditProfileViewController: DatePickerDelegate {
 
-    // Events
+    // MARK: - Events
 
     func dateChanged(_ view: DatePickerView, date: Date) {
         let dateString = date.toString(dateFormat: "dd.MM.yyyy")
@@ -262,38 +269,36 @@ extension EditProfileViewController: DatePickerDelegate {
         reloadPropertyCell(.Birthday)
     }
 
-    // Actions
+    // MARK: - Actions
 
     func cancelDatePicker() {
         birthdayPicker.removeFromSuperview()
-        let originBirthdayDate = editProfileModelController.getOriginPropertyValue(.Birthday)
-        editProfileModelController.updateProperty(.Birthday, value: originBirthdayDate)
+        editProfileModelController.resetBirthdayProperty()
         reloadPropertyCell(.Birthday)
     }
 }
 
-// MARK: - Pick Sex
+// MARK: - ItemPickerDelegate | Pick Sex
 extension EditProfileViewController: ItemPickerDelegate {
 
-    // Events
+    // MARK: - Events
 
     func itemChanged(_ view: ItemPickerView, index: Int) {
-        editProfileModelController.updateProperty(.Sex, value: String(index))
+        editProfileModelController.updateSexProperty(sexType: index)
         reloadPropertyCell(.Sex)
     }
 
     func itemSelected(_ view: ItemPickerView, index: Int) {
         sexPicker.removeFromSuperview()
-        editProfileModelController.updateProperty(.Sex, value: String(index))
+        editProfileModelController.updateSexProperty(sexType: index)
         reloadPropertyCell(.Sex)
     }
 
-    // Actions
+    // MARK: - Actions
 
     func cancelItemPicker() {
         sexPicker.removeFromSuperview()
-        let originSexType = editProfileModelController.getOriginPropertyValue(.Sex)
-        editProfileModelController.updateProperty(.Sex, value: originSexType)
+        editProfileModelController.resetSexProperty()
         reloadPropertyCell(.Sex)
     }
 }

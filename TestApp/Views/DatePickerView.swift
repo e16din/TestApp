@@ -6,11 +6,11 @@
 import UIKit
 
 @objc protocol DatePickerDelegate {
-    // Events
+    // MARK: - Events
     func dateChanged(_ view: DatePickerView, date: Date)
     func dateSelected(_ view: DatePickerView, selectedDate: Date)
 
-    // Actions
+    // MARK: - Actions
     func cancelDatePicker()
 }
 
@@ -24,7 +24,7 @@ class DatePickerView: UIView,
     var toolBar: UIToolbar!
     var outsideStubView: UIView!
 
-    // Events
+    // MARK: - Events
 
     init(_ date: Date) {
         super.init(frame: CGRect())
@@ -54,7 +54,7 @@ class DatePickerView: UIView,
         delegate?.cancelDatePicker()
     }
 
-    // Actions
+    // MARK: - Actions
 
     func showDatePicker(date: Date) {
         datePicker = UIDatePicker()

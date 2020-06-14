@@ -15,6 +15,22 @@ protocol PropertyViewCellDelegate {
 
 class PropertyViewCell: UITableViewCell, UITextViewDelegate {
 
+    struct Property {
+        var type: Profile.PropertyType
+        var name = ""
+        var value = ""
+        var isSingleLine = true
+        var isClickable = false
+
+        init(_ type: Profile.PropertyType, name: String, value: String, isSingleLine: Bool, isClickable: Bool) {
+            self.type = type
+            self.name = name
+            self.value = value
+            self.isSingleLine = isSingleLine
+            self.isClickable = isClickable
+        }
+    }
+
     let DEFAULT_WIDTH: CGFloat = UIScreen.main.bounds.width / 2
 
     var delegate: PropertyViewCellDelegate?
@@ -111,10 +127,12 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
         contentView.addConstraints([leftConstraint, rightConstraint, topConstraint, bottomConstraint])
     }
 
-    func updateCell(values: (name: String, value: String, isSingleLine: Bool)) {
-        propertyLabelView?.text = values.name
-        propertyFieldView.text = values.value
-        isSingleLine = values.isSingleLine
+    func updateCell(_ cellData: Property) {
+        propertyLabelView?.text = cellData.name
+        propertyFieldView.text = cellData.value
+        isSingleLine = cellData.isSingleLine
+
+        isEditableProperty = isEditableProperty && !cellData.isClickable
 
         if isSingleLine {
             propertyFieldView.textContainer.maximumNumberOfLines = 1

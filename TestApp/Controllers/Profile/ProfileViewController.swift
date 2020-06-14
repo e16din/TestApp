@@ -17,7 +17,7 @@ class ProfileViewController: UIViewController {
 
     var propertiesTableView: UITableView!
 
-    // Events
+    // MARK: - Events
 
     required init(_ modelController: ProfileModelController) {
         profileModelController = modelController
@@ -31,7 +31,11 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        profileModelController.loadProfileProperties()
+        do {
+            try profileModelController.loadProfile()
+        } catch {
+            print("Error: loadProfile()")
+        }
 
         showView()
         showNavigationBar()
@@ -48,14 +52,14 @@ class ProfileViewController: UIViewController {
         showEditProfileScreen()
     }
 
-    // Actions
+    // MARK: - Actions
 
     func showView() {
         view.backgroundColor = .white
     }
 
     func showEditProfileScreen() {
-        let editProfileModelController = EditProfileModelController(profileModelController.profile.copy(), delegate: profileModelController)
+        let editProfileModelController = EditProfileModelController(profileModelController.profile, delegate: profileModelController)
         let editProfileViewController = EditProfileViewController(editProfileModelController)
         navigationController?.pushViewController(editProfileViewController, animated: true)
     }
@@ -96,7 +100,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         profileModelController.getPropertiesCount()
     }
 
-    // Events
+    // MARK: - Events
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PROFILE_PROPERTY_CELL) as! PropertyViewCell
@@ -106,7 +110,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
 
-    // Actions
+    // MARK: - Actions
 
     func showPropertyCell(cell: PropertyViewCell, indexPath: IndexPath) {
         cell.selectionStyle = .none
@@ -115,21 +119,21 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
 
         cell.delegate = self
 
-        let propertyData = profileModelController.makeDataForPropertyCell(index: indexPath.row)
-        cell.updateCell(values: propertyData)
+        let propertyData = profileModelController.getPropertyCellData(indexPath.row)
+        cell.updateCell(propertyData)
     }
 }
 
 // MARK: - PropertyViewCellDelegate
 extension ProfileViewController: PropertyViewCellDelegate {
 
-    // Events
+    // MARK: - Events
 
     func propertyTextChanged(_ cell: PropertyViewCell, text: String, rowIndex: Int) {
         // do nothing
     }
 
-    // Actions
+    // MARK: - Actions
 
     func updatePropertyCellHeight(_ cell: PropertyViewCell) {
         propertiesTableView.beginUpdates()

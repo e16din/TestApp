@@ -10,58 +10,72 @@ class ProfileModelController: EditProfileModelControllerDelegate {
 
     var profile: Profile
 
-    // Events
+    var properties: [PropertyViewCell.Property]!
+
+    // MARK: - Events
 
     init(_ profile: Profile) {
         self.profile = profile
+        properties = makeProperties(profile)
     }
 
     func profileSaved(_ newProfile: Profile) {
-        self.profile = newProfile
+        profile = newProfile
+        properties = makeProperties(profile)
     }
 
-    // Actions
+    // MARK: - Actions
 
-    func loadProfileProperties() {
-        let defaults = UserDefaults.standard
-
-        for (index, property) in profile.properties.enumerated() {
-            if let value = defaults.string(forKey: property.name.rawValue) {
-                profile.properties[index].value = value
-            }
+    func loadProfile() throws {
+        let decoder = JSONDecoder()
+        if let profileJson = UserDefaults.standard.string(forKey: profile.KEY)?.utf8 {
+            let data = Data(profileJson)
+            profile = try decoder.decode(Profile.self, from: data)
+            properties = makeProperties(profile)
         }
     }
 
-    // Support
+    func makeProperties(_ profile: Profile) -> [PropertyViewCell.Property] {
+        [
+            PropertyViewCell.Property(.Name,
+                name: "Имя",
+                value: profile.name.isEmpty ? "Не указано" : profile.name,
+                isSingleLine: true,
+                isClickable: false),
 
-    func makeDataForPropertyCell(index: Int) -> (name: String, value: String, isSingleLine: Bool) {
-        let property = profile.properties[index]
-        let isEmptyValue = property.value.isEmpty
+            PropertyViewCell.Property(.Surname,
+                name: "Фамилия",
+                value: profile.surname.isEmpty ? "Не указана" : profile.surname,
+                isSingleLine: false,
+                isClickable: false),
 
-        var result = ("Unknown", "Unknown", true)
+            PropertyViewCell.Property(.Patronymic,
+                name: "Отчество",
+                value: profile.patronymic.isEmpty ? "Не указано" : profile.patronymic,
+                isSingleLine: true,
+                isClickable: false),
 
-        switch property.name {
-        case .Birthday:
-            result = ("Дата Рождения", isEmptyValue ? "Не указана" : property.value, true)
+            PropertyViewCell.Property(.Birthday,
+                name: "Дата Рождения",
+                value: profile.birthday.isEmpty ? "Не указана" : profile.birthday,
+                isSingleLine: true,
+                isClickable: true),
 
-        case .Sex:
-            let sexType = Profile.SexTypes().getString(Int(property.value) ?? 0)
-            result = ("Пол", sexType, true)
-
-        case .Name:
-            result = ("Имя", isEmptyValue ? "Не указано" : property.value, true)
-
-        case .Surname:
-            result = ("Фамилия", isEmptyValue ? "Не указана" : property.value, false)
-
-        case .Patronymic:
-            result = ("Отчество", isEmptyValue ? "Не указано" : property.value, true)
-        }
-
-        return result
+            PropertyViewCell.Property(.Sex,
+                name: "Пол",
+                value: SexTypes().getString(profile.sex),
+                isSingleLine: true,
+                isClickable: true),
+        ]
     }
+
+    // MARK: - Support
 
     func getPropertiesCount() -> Int {
-        profile.properties.count
+        properties.count
+    }
+
+    func getPropertyCellData(_ index: Int) -> PropertyViewCell.Property {
+        properties[index]
     }
 }

@@ -5,133 +5,176 @@
 
 import Foundation
 
-protocol EditProfileModelControllerDelegate {
+protocol EditProfileModelControllerDelegate: class {
     func profileSaved(_ profile: Profile)
 }
 
 class EditProfileModelController {
 
-    var profile: Profile!
-    var originProperties: [Profile.Property]!
+    var profile: Profile
 
-    var delegate: EditProfileModelControllerDelegate?
+    var properties: [PropertyViewCell.Property]!
+    var originProperties: [PropertyViewCell.Property]!
 
+    weak var delegate: EditProfileModelControllerDelegate?
 
-    // Events
+    // MARK: - Events
 
     init(_ profile: Profile, delegate: EditProfileModelControllerDelegate) {
         self.profile = profile
         self.delegate = delegate
 
-        originProperties = profile.properties.map({ it in
-            it.copy()
-        })
+        properties = makeProperties(profile)
+        originProperties = makeProperties(profile)
     }
 
-    // Actions
+    // MARK: - Actions
 
-    func saveProfileProperties() {
-        let defaults = UserDefaults.standard
-        for property in profile.properties {
-            defaults.set(property.value, forKey: property.name.rawValue)
-        }
+    func saveProfile() throws {
+        profile = makeProfile(properties)
 
-        originProperties = profile.properties.map { property -> Profile.Property in
-            property
-        }
+        let encoder = JSONEncoder()
+        let data = try encoder.encode(profile)
+        let profileJson = String(data: data, encoding: .utf8)
+        UserDefaults.standard.set(profileJson, forKey: profile.KEY)
 
-        delegate?.profileSaved(profile.copy())
+        originProperties = properties
+
+        delegate?.profileSaved(profile)
+    }
+
+    func makeProperties(_ profile: Profile) -> [PropertyViewCell.Property] {
+        [
+            PropertyViewCell.Property(.Name,
+                name: "Имя",
+                value: profile.name,
+                isSingleLine: true,
+                isClickable: false),
+
+            PropertyViewCell.Property(.Surname,
+                name: "Фамилия",
+                value: profile.surname,
+                isSingleLine: false,
+                isClickable: false),
+
+            PropertyViewCell.Property(.Patronymic,
+                name: "Отчество",
+                value: profile.patronymic,
+                isSingleLine: true,
+                isClickable: false),
+
+            PropertyViewCell.Property(.Birthday,
+                name: "Дата Рождения",
+                value: profile.birthday.isEmpty ? Date().toString(dateFormat: "dd.MM.yyyy") : profile.birthday,
+                isSingleLine: true,
+                isClickable: true),
+
+            PropertyViewCell.Property(.Sex,
+                name: "Пол",
+                value: SexTypes().getString(profile.sex),
+                isSingleLine: true,
+                isClickable: true),
+        ]
+    }
+
+    func makeProfile(_ props: [PropertyViewCell.Property]) -> Profile {
+        Profile(
+            name: getPropertyValue(.Name),
+            surname: getPropertyValue(.Surname),
+            patronymic: getPropertyValue(.Patronymic),
+            birthday: getPropertyValue(.Birthday),
+            sex: SexTypes().getType(getPropertyValue(.Sex))
+        )
+    }
+
+    func updateProperty(_ type: Profile.PropertyType, value: String) {
+        let index = getPropertyIndex(type)
+        properties[index].value = value
     }
 
     func updateProperty(_ index: Int, value: String) {
-        profile.properties[index].value = value
+        properties[index].value = value
     }
 
-    func updateProperty(_ name: Profile.Property.Name, value: String) {
-        let propertyIndex = getPropertyIndex(name)
-        profile.properties[propertyIndex].value = value
+    func updateSexProperty(sexType: Int) {
+        let index = getPropertyIndex(.Sex)
+        updateProperty(index, value: SexTypes().getString(sexType))
     }
 
-    // Support
-
-    func getPropertyIndex(_ name: Profile.Property.Name) -> Int {
-        profile.getPropertyIndex(name: name)
+    func resetSexProperty() {
+        let index = getPropertyIndex(.Sex)
+        let originSexValue = getOriginPropertyValue(.Sex)
+        updateProperty(index, value: originSexValue)
     }
 
-    func getPropertyValue(_ name: Profile.Property.Name) -> String {
-        let index = getPropertyIndex(name)
-        let value = profile.properties[index].value
-        return value
+    // MARK: - Support
+
+    func getPropertyValue(_ type: Profile.PropertyType) -> String {
+        let index = getPropertyIndex(type)
+        return properties[index].value
     }
 
-    func getOriginPropertyValue(_ name: Profile.Property.Name) -> String {
-        let index = getPropertyIndex(name)
-        let originValue = originProperties[index].value
-        return originValue
+    func getOriginPropertyValue(_ type: Profile.PropertyType) -> String {
+        let index = getPropertyIndex(type)
+        return originProperties[index].value
     }
 
     func isProfileChanged() -> Bool {
         var hasChanges = false
 
-        for (index, property) in profile.properties.enumerated() {
-            hasChanges = property.value != originProperties[index].value
+        for (i, property) in properties.enumerated() {
+            hasChanges = property.value != originProperties[i].value
             if (hasChanges) {
                 break
             }
         }
+
         return hasChanges
     }
 
     func areRequiredPropertiesFilled() -> Bool {
-        for property in profile.properties {
-            if (property.name != .Patronymic && property.value.isEmpty) {
-                return false
-            }
+        let tempProfile = makeProfile(properties)
+        if tempProfile.name.isEmpty {
+            return false
+        }
+        if tempProfile.surname.isEmpty {
+            return false
+        }
+        if tempProfile.sex == 0 {
+            return false
+        }
+        if tempProfile.birthday.isEmpty || tempProfile.birthday == Date().toString(dateFormat: "dd.MM.yyyy") {
+            return false
         }
 
         return true
     }
 
-    func makeDataForPropertyCell(index: Int) -> (name: String, value: String, isSingleLine: Bool) {
-        let property = profile.properties[index]
-        let isEmptyValue = property.value.isEmpty
-
-        var result = ("Unknown", "Unknown", true)
-
-        switch property.name {
-        case .Birthday:
-            result = ("Дата Рождения", isEmptyValue ? "" : property.value, true)
-
-        case .Sex:
-            let sexType = Profile.SexTypes().getString(Int(property.value) ?? 0)
-            result = ("Пол", sexType, true)
-
-        case .Name:
-            result = ("Имя", isEmptyValue ? "" : property.value, true)
-
-        case .Surname:
-            result = ("Фамилия", isEmptyValue ? "" : property.value, false)
-
-        case .Patronymic:
-            result = ("Отчество", isEmptyValue ? "" : property.value, true)
-        }
-
-        return result
+    func getPropertyCellData(index: Int) -> PropertyViewCell.Property {
+        properties[index]
     }
 
     func getPropertiesCount() -> Int {
-        profile.properties.count
+        properties.count
     }
 
-    func isClickableProperty(_ index: Int) -> Bool {
-        let propertyName = profile.properties[index].name
-
-        switch propertyName {
-        case .Birthday, .Sex:
-            return true
-        default:
-            return false
+    func getPropertyIndex(_ type: Profile.PropertyType) -> Int {
+        for (i, item) in properties.enumerated() {
+            if (item.type == type) {
+                return i
+            }
         }
 
+        return -1
     }
+
+    func getPropertyType(_ index: Int) -> Profile.PropertyType {
+        properties[index].type
+    }
+
+    func resetBirthdayProperty() {
+        let originBirthdayDate = getOriginPropertyValue(.Birthday)
+        updateProperty(.Birthday, value: originBirthdayDate)
+    }
+
 }

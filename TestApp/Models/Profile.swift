@@ -5,50 +5,51 @@
 
 import Foundation
 
-class Profile {
+struct Profile: Codable {
 
-    struct Property {
-        enum Name: String {
-            case Name
-            case Surname
-            case Patronymic
-            case Birthday
-            case Sex
-        }
-
-        var name: Name
-        var value: String
-
-        func copy() -> Property {
-            return Property(name: name, value: value)
-        }
+    enum PropertyType: String, CodingKey {
+        case Name
+        case Surname
+        case Patronymic
+        case Birthday
+        case Sex
     }
 
-    class SexTypes {
-        let sexTypes = [
-            0: "Не выбран",
-            1: "Мужской",
-            2: "Женский"
-        ]
+    let KEY = "Profile"
 
-        func getString(_ type: Int) -> String {
-            sexTypes[type] ?? String(type)
-        }
+    var name = ""
+    var surname = ""
+    var patronymic = ""
+    var birthday = ""
+    var sex = 0
+
+    init() {
+        // do nothing
     }
 
-    var properties: [Property]
-
-    init(_ properties: [Property]) {
-        self.properties = properties
+    init(name: String, surname: String, patronymic: String, birthday: String, sex: Int) {
+        self.name = name
+        self.surname = surname
+        self.patronymic = patronymic
+        self.birthday = birthday
+        self.sex = sex
     }
 
-    func copy() -> Profile {
-        Profile(properties.map { property -> Profile.Property in
-            property.copy()
-        })
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: PropertyType.self)
+        name = try container.decode(String.self, forKey: .Name)
+        surname = try container.decode(String.self, forKey: .Surname)
+        patronymic = try container.decode(String.self, forKey: .Patronymic)
+        birthday = try container.decode(String.self, forKey: .Birthday)
+        sex = try container.decode(Int.self, forKey: .Sex)
     }
 
-    func getPropertyIndex(name: Property.Name) -> Int {
-        properties.firstIndex(where: { $0.name == name }) ?? -1
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: PropertyType.self)
+        try container.encode(name, forKey: .Name)
+        try container.encode(surname, forKey: .Surname)
+        try container.encode(patronymic, forKey: .Patronymic)
+        try container.encode(birthday, forKey: .Birthday)
+        try container.encode(sex, forKey: .Sex)
     }
 }
