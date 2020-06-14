@@ -47,11 +47,7 @@ class EditProfileViewController: UIViewController {
             showValidationFailedAlert()
 
         } else {
-            do {
-                try editProfileModelController.saveProfile()
-            } catch {
-                print("Error: saveProfile()")
-            }
+            editProfileModelController.saveProfileAsync(nil)
         }
     }
 
@@ -96,7 +92,7 @@ class EditProfileViewController: UIViewController {
     }
 
     func showValidationFailedAlert() {
-        let alert = UIAlertController(title: "Ошибка", message: "Все поля, за исключением отчества являются обязательными", 
+        let alert = UIAlertController(title: "Ошибка", message: "Все поля, за исключением отчества являются обязательными",
             preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
@@ -113,12 +109,9 @@ class EditProfileViewController: UIViewController {
                 self.showValidationFailedAlert()
 
             } else {
-                do {
-                    try self.editProfileModelController.saveProfile()
-                } catch {
-                    print("Error: saveProfile()")
+                self.editProfileModelController.saveProfileAsync {
+                    self.hideEditProfileScreen()
                 }
-                self.hideEditProfileScreen()
             }
         }))
 

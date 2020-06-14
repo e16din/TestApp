@@ -30,17 +30,26 @@ class EditProfileModelController {
 
     // MARK: - Actions
 
-    func saveProfile() throws {
-        profile = makeProfile(properties)
+    func saveProfileAsync(_ doneAction: (() -> Void)?) {
+        let queue = DispatchQueue.global(qos: .userInitiated)
+        queue.async {
+            self.profile = self.makeProfile(self.properties)
+            self.originProperties = self.properties
 
-        let encoder = JSONEncoder()
-        let data = try encoder.encode(profile)
-        let profileJson = String(data: data, encoding: .utf8)
-        UserDefaults.standard.set(profileJson, forKey: profile.KEY)
+            do {
+                let encoder = JSONEncoder()
+                let data = try encoder.encode(self.profile)
+                let profileJson = String(data: data, encoding: .utf8)
+                UserDefaults.standard.set(profileJson, forKey: self.profile.KEY)
+            } catch {
+                print("Error: saveProfileAsync()")
+            }
 
-        originProperties = properties
-
-        delegate?.profileSaved(profile)
+            DispatchQueue.main.async {
+                self.delegate?.profileSaved(self.profile)
+                doneAction?()
+            }
+        }
     }
 
     func makeProperties(_ profile: Profile) -> [PropertyViewCell.Property] {
