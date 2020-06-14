@@ -127,12 +127,12 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
         contentView.addConstraints([leftConstraint, rightConstraint, topConstraint, bottomConstraint])
     }
 
-    func updateCell(_ cellData: Property) {
-        propertyLabelView?.text = cellData.name
-        propertyFieldView.text = cellData.value
-        isSingleLine = cellData.isSingleLine
+    func updateCell(_ property: Property) {
+        propertyLabelView?.text = property.name
+        propertyFieldView.text = property.value
+        isSingleLine = property.isSingleLine
 
-        isEditableProperty = isEditableProperty && !cellData.isClickable
+        isEditableProperty = isEditableProperty && !property.isClickable
 
         if isSingleLine {
             propertyFieldView.textContainer.maximumNumberOfLines = 1

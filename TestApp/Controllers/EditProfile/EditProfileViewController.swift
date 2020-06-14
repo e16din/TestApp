@@ -175,8 +175,8 @@ extension EditProfileViewController: UITableViewDataSource, UITableViewDelegate 
 
         cell.delegate = self
 
-        let cellData = editProfileModelController.getPropertyCellData(index: index)
-        cell.updateCell(cellData)
+        let property = editProfileModelController.getPropertyCellData(index: index)
+        cell.updateCell(property)
     }
 
     func reloadPropertyCell(_ type: Profile.PropertyType) {
