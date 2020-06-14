@@ -59,10 +59,10 @@ class EditProfileViewController: UIViewController {
         let hasChanges = editProfileModelController.isProfileChanged()
         if hasChanges {
             showExitAlert()
-            return
-        }
 
-        hideEditProfileScreen()
+        } else {
+            hideEditProfileScreen()
+        }
     }
 
     // MARK: - Actions
@@ -72,10 +72,8 @@ class EditProfileViewController: UIViewController {
     }
 
     func showNavigationBar() {
-        let backButton = UIBarButtonItem()
-        backButton.title = "Назад"
+        navigationController?.navigationBar.topItem?.hidesBackButton
 
-        navigationController?.navigationBar.topItem?.hidesBackButton// = backButton
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Назад", style: .plain, target: self,
             action: #selector(backNavButtonPressed))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .plain, target: self,
@@ -98,7 +96,8 @@ class EditProfileViewController: UIViewController {
     }
 
     func showValidationFailedAlert() {
-        let alert = UIAlertController(title: "Ошибка", message: "Все поля, за исключением отчества являются обязательными", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Ошибка", message: "Все поля, за исключением отчества являются обязательными", 
+            preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
@@ -106,7 +105,7 @@ class EditProfileViewController: UIViewController {
     func showExitAlert() {
         exitAlert = UIAlertController(title: "Внимание!",
             message: "Данные были изменены. Вы желаете сохранить изменения, в противном случае внесенные правки будут\nотменены.",
-            preferredStyle: UIAlertController.Style.alert)
+            preferredStyle: .alert)
 
         exitAlert.addAction(UIAlertAction(title: "Сохранить", style: .default, handler: { (action: UIAlertAction?) in
             let isValid = self.editProfileModelController.areRequiredPropertiesFilled()
@@ -186,11 +185,6 @@ extension EditProfileViewController: UITableViewDataSource, UITableViewDelegate 
     }
 
     func showBirthdayPicker() {
-        if birthdayPicker != nil && birthdayPicker.isDescendant(of: view) {
-            print("The birthdayPicker is always shown")
-            return
-        }
-
         birthdayPicker = DatePickerView({
             let dateValue = editProfileModelController.getPropertyValue(.Birthday)
             let hasSelectedDate = !dateValue.isEmpty
@@ -213,11 +207,6 @@ extension EditProfileViewController: UITableViewDataSource, UITableViewDelegate 
     }
 
     func showSexPicker() {
-        if sexPicker != nil && sexPicker.isDescendant(of: view) {
-            print("The sexPicker is always shown")
-            return
-        }
-
         let sexValue = editProfileModelController.getPropertyValue(.Sex)
         let sexTypes = SexTypes().sexTypes
         sexPicker = ItemPickerView(sexTypes, selectedRow: Int(sexValue) ?? 0)

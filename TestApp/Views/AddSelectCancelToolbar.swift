@@ -6,7 +6,7 @@
 import UIKit
 
 @objc protocol SelectCancelToolbarDelegate {
-    // Events
+    // MARK: - Events
     func toolbarSelectButtonPressed()
     func toolbarCancelButtonPressed()
 }

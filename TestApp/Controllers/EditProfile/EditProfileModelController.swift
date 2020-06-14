@@ -107,6 +107,11 @@ class EditProfileModelController {
         updateProperty(index, value: originSexValue)
     }
 
+    func resetBirthdayProperty() {
+        let originBirthdayDate = getOriginPropertyValue(.Birthday)
+        updateProperty(.Birthday, value: originBirthdayDate)
+    }
+
     // MARK: - Support
 
     func getPropertyValue(_ type: Profile.PropertyType) -> String {
@@ -171,10 +176,4 @@ class EditProfileModelController {
     func getPropertyType(_ index: Int) -> Profile.PropertyType {
         properties[index].type
     }
-
-    func resetBirthdayProperty() {
-        let originBirthdayDate = getOriginPropertyValue(.Birthday)
-        updateProperty(.Birthday, value: originBirthdayDate)
-    }
-
 }

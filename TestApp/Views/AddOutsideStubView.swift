@@ -6,7 +6,7 @@
 import UIKit
 
 @objc protocol OutsideStubViewDelegate {
-    // Events
+    // MARK: - Events
     func outsideStubPressed()
 }
 

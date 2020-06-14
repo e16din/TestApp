@@ -31,7 +31,7 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
         }
     }
 
-    let DEFAULT_WIDTH: CGFloat = UIScreen.main.bounds.width / 2
+    let DEFAULT_WIDTH = UIScreen.main.bounds.width / 2
 
     var delegate: PropertyViewCellDelegate?
 
