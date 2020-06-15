@@ -55,31 +55,31 @@ class EditProfileModelController {
 
     func makeProperties(_ profile: Profile) -> [PropertyViewCell.Property] {
         [
-            PropertyViewCell.Property(.Name,
+            PropertyViewCell.Property(.name,
                 name: "Имя",
                 value: profile.name,
                 isSingleLine: true,
                 isClickable: false),
 
-            PropertyViewCell.Property(.Surname,
+            PropertyViewCell.Property(.surname,
                 name: "Фамилия",
                 value: profile.surname,
                 isSingleLine: false,
                 isClickable: false),
 
-            PropertyViewCell.Property(.Patronymic,
+            PropertyViewCell.Property(.patronymic,
                 name: "Отчество",
                 value: profile.patronymic,
                 isSingleLine: true,
                 isClickable: false),
 
-            PropertyViewCell.Property(.Birthday,
+            PropertyViewCell.Property(.birthday,
                 name: "Дата Рождения",
                 value: profile.birthday.isEmpty ? Date().toString(dateFormat: "dd.MM.yyyy") : profile.birthday,
                 isSingleLine: true,
                 isClickable: true),
 
-            PropertyViewCell.Property(.Sex,
+            PropertyViewCell.Property(.sex,
                 name: "Пол",
                 value: SexTypes().getString(profile.sex),
                 isSingleLine: true,
@@ -89,11 +89,11 @@ class EditProfileModelController {
 
     func makeProfile(_ props: [PropertyViewCell.Property]) -> Profile {
         Profile(
-            name: getPropertyValue(.Name),
-            surname: getPropertyValue(.Surname),
-            patronymic: getPropertyValue(.Patronymic),
-            birthday: getPropertyValue(.Birthday),
-            sex: SexTypes().getType(getPropertyValue(.Sex))
+            name: getPropertyValue(.name),
+            surname: getPropertyValue(.surname),
+            patronymic: getPropertyValue(.patronymic),
+            birthday: getPropertyValue(.birthday),
+            sex: SexTypes().getType(getPropertyValue(.sex))
         )
     }
 
@@ -107,19 +107,19 @@ class EditProfileModelController {
     }
 
     func updateSexProperty(sexType: Int) {
-        let index = getPropertyIndex(.Sex)
+        let index = getPropertyIndex(.sex)
         updateProperty(index, value: SexTypes().getString(sexType))
     }
 
     func resetSexProperty() {
-        let index = getPropertyIndex(.Sex)
-        let originSexValue = getOriginPropertyValue(.Sex)
+        let index = getPropertyIndex(.sex)
+        let originSexValue = getOriginPropertyValue(.sex)
         updateProperty(index, value: originSexValue)
     }
 
     func resetBirthdayProperty() {
-        let originBirthdayDate = getOriginPropertyValue(.Birthday)
-        updateProperty(.Birthday, value: originBirthdayDate)
+        let originBirthdayDate = getOriginPropertyValue(.birthday)
+        updateProperty(.birthday, value: originBirthdayDate)
     }
 
     // MARK: - Support

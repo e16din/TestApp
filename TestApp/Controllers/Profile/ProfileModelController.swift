@@ -49,31 +49,31 @@ class ProfileModelController: EditProfileModelControllerDelegate {
 
     func makeProperties(_ profile: Profile) -> [PropertyViewCell.Property] {
         [
-            PropertyViewCell.Property(.Name,
+            PropertyViewCell.Property(.name,
                 name: "Имя",
                 value: profile.name.isEmpty ? "Не указано" : profile.name,
                 isSingleLine: true,
                 isClickable: false),
 
-            PropertyViewCell.Property(.Surname,
+            PropertyViewCell.Property(.surname,
                 name: "Фамилия",
                 value: profile.surname.isEmpty ? "Не указана" : profile.surname,
                 isSingleLine: false,
                 isClickable: false),
 
-            PropertyViewCell.Property(.Patronymic,
+            PropertyViewCell.Property(.patronymic,
                 name: "Отчество",
                 value: profile.patronymic.isEmpty ? "Не указано" : profile.patronymic,
                 isSingleLine: true,
                 isClickable: false),
 
-            PropertyViewCell.Property(.Birthday,
+            PropertyViewCell.Property(.birthday,
                 name: "Дата Рождения",
                 value: profile.birthday.isEmpty ? "Не указана" : profile.birthday,
                 isSingleLine: true,
                 isClickable: true),
 
-            PropertyViewCell.Property(.Sex,
+            PropertyViewCell.Property(.sex,
                 name: "Пол",
                 value: SexTypes().getString(profile.sex),
                 isSingleLine: true,

@@ -8,11 +8,11 @@ import Foundation
 struct Profile: Codable {
 
     enum PropertyType: String, CodingKey {
-        case Name
-        case Surname
-        case Patronymic
-        case Birthday
-        case Sex
+        case name
+        case surname
+        case patronymic
+        case birthday
+        case sex
     }
 
     let KEY = "Profile"
@@ -37,19 +37,19 @@ struct Profile: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: PropertyType.self)
-        name = try container.decode(String.self, forKey: .Name)
-        surname = try container.decode(String.self, forKey: .Surname)
-        patronymic = try container.decode(String.self, forKey: .Patronymic)
-        birthday = try container.decode(String.self, forKey: .Birthday)
-        sex = try container.decode(Int.self, forKey: .Sex)
+        name = try container.decode(String.self, forKey: .name)
+        surname = try container.decode(String.self, forKey: .surname)
+        patronymic = try container.decode(String.self, forKey: .patronymic)
+        birthday = try container.decode(String.self, forKey: .birthday)
+        sex = try container.decode(Int.self, forKey: .sex)
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: PropertyType.self)
-        try container.encode(name, forKey: .Name)
-        try container.encode(surname, forKey: .Surname)
-        try container.encode(patronymic, forKey: .Patronymic)
-        try container.encode(birthday, forKey: .Birthday)
-        try container.encode(sex, forKey: .Sex)
+        try container.encode(name, forKey: .name)
+        try container.encode(surname, forKey: .surname)
+        try container.encode(patronymic, forKey: .patronymic)
+        try container.encode(birthday, forKey: .birthday)
+        try container.encode(sex, forKey: .sex)
     }
 }

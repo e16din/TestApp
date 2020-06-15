@@ -149,11 +149,11 @@ extension EditProfileViewController: UITableViewDataSource, UITableViewDelegate 
         let propertyName = editProfileModelController.getPropertyType(indexPath.row)
 
         switch propertyName {
-        case .Birthday:
+        case .birthday:
             showBirthdayPicker()
-        case .Sex:
+        case .sex:
             showSexPicker()
-        case .Name, .Surname, .Patronymic:
+        case .name, .surname, .patronymic:
             // Set focus to any PropertyViewCell.UITextView
             break
         }
@@ -179,7 +179,7 @@ extension EditProfileViewController: UITableViewDataSource, UITableViewDelegate 
 
     func showBirthdayPicker() {
         birthdayPicker = DatePickerView({
-            let dateValue = editProfileModelController.getPropertyValue(.Birthday)
+            let dateValue = editProfileModelController.getPropertyValue(.birthday)
             let hasSelectedDate = !dateValue.isEmpty
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd.MM.yyyy"
@@ -200,7 +200,7 @@ extension EditProfileViewController: UITableViewDataSource, UITableViewDelegate 
     }
 
     func showSexPicker() {
-        let sexValue = editProfileModelController.getPropertyValue(.Sex)
+        let sexValue = editProfileModelController.getPropertyValue(.sex)
         let sexTypes = SexTypes().sexTypes
         sexPicker = ItemPickerView(sexTypes, selectedRow: Int(sexValue) ?? 0)
         sexPicker.delegate = self
@@ -240,15 +240,15 @@ extension EditProfileViewController: DatePickerDelegate {
 
     func dateChanged(_ view: DatePickerView, date: Date) {
         let dateString = date.toString(dateFormat: "dd.MM.yyyy")
-        editProfileModelController.updateProperty(.Birthday, value: dateString)
-        reloadPropertyCell(.Birthday)
+        editProfileModelController.updateProperty(.birthday, value: dateString)
+        reloadPropertyCell(.birthday)
     }
 
     func dateSelected(_ view: DatePickerView, selectedDate: Date) {
         birthdayPicker.removeFromSuperview()
         let dateString = selectedDate.toString(dateFormat: "dd.MM.yyyy")
-        editProfileModelController.updateProperty(.Birthday, value: dateString)
-        reloadPropertyCell(.Birthday)
+        editProfileModelController.updateProperty(.birthday, value: dateString)
+        reloadPropertyCell(.birthday)
     }
 
     // MARK: - Actions
@@ -256,7 +256,7 @@ extension EditProfileViewController: DatePickerDelegate {
     func cancelDatePicker() {
         birthdayPicker.removeFromSuperview()
         editProfileModelController.resetBirthdayProperty()
-        reloadPropertyCell(.Birthday)
+        reloadPropertyCell(.birthday)
     }
 }
 
@@ -267,13 +267,13 @@ extension EditProfileViewController: ItemPickerDelegate {
 
     func itemChanged(_ view: ItemPickerView, index: Int) {
         editProfileModelController.updateSexProperty(sexType: index)
-        reloadPropertyCell(.Sex)
+        reloadPropertyCell(.sex)
     }
 
     func itemSelected(_ view: ItemPickerView, index: Int) {
         sexPicker.removeFromSuperview()
         editProfileModelController.updateSexProperty(sexType: index)
-        reloadPropertyCell(.Sex)
+        reloadPropertyCell(.sex)
     }
 
     // MARK: - Actions
@@ -281,6 +281,6 @@ extension EditProfileViewController: ItemPickerDelegate {
     func cancelItemPicker() {
         sexPicker.removeFromSuperview()
         editProfileModelController.resetSexProperty()
-        reloadPropertyCell(.Sex)
+        reloadPropertyCell(.sex)
     }
 }
