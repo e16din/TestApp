@@ -136,16 +136,7 @@ class EditProfileModelController {
     }
 
     func isProfileChanged() -> Bool {
-        var hasChanges = false
-
-        for (i, property) in properties.enumerated() {
-            hasChanges = property.value != originProperties[i].value
-            if (hasChanges) {
-                break
-            }
-        }
-
-        return hasChanges
+        properties != originProperties
     }
 
     func areRequiredPropertiesFilled() -> Bool {
@@ -175,13 +166,7 @@ class EditProfileModelController {
     }
 
     func getPropertyIndex(_ type: Profile.PropertyType) -> Int {
-        for (i, item) in properties.enumerated() {
-            if (item.type == type) {
-                return i
-            }
-        }
-
-        return -1
+        properties.index(where: { $0.type == type }) ?? -1
     }
 
     func getPropertyType(_ index: Int) -> Profile.PropertyType {

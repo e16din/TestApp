@@ -15,7 +15,7 @@ protocol PropertyViewCellDelegate {
 
 class PropertyViewCell: UITableViewCell {
 
-    struct Property {
+    struct Property : Equatable {
         var type: Profile.PropertyType
         var name = ""
         var value = ""
