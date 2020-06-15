@@ -41,7 +41,8 @@ class EditProfileModelController {
                 let encoder = JSONEncoder()
                 let data = try encoder.encode(self.profile)
                 let profileJson = String(data: data, encoding: .utf8)
-                UserDefaults.standard.set(profileJson, forKey: self.profile.KEY)
+                UserDefaults.standard.set(profileJson, forKey: self.profile.userDefaultsKey)
+
             } catch {
                 print("Error: saveProfileAsync()")
             }

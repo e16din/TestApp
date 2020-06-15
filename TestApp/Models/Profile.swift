@@ -15,7 +15,7 @@ struct Profile: Codable {
         case sex
     }
 
-    let KEY = "Profile"
+    let userDefaultsKey = "Profile"
 
     var name = ""
     var surname = ""

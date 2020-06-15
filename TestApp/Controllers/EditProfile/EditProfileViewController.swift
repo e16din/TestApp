@@ -11,7 +11,7 @@ import UIKit
 
 class EditProfileViewController: UIViewController {
 
-    let EDIT_PROFILE_PROPERTY_CELL = "EDIT_PROFILE_PROPERTY_CELL"
+    let editProfilePropertyCellId = "EDIT_PROFILE_PROPERTY_CELL"
 
     var editProfileModelController: EditProfileModelController
 
@@ -82,7 +82,7 @@ class EditProfileViewController: UIViewController {
         propertiesTableView.delegate = self
         propertiesTableView.dataSource = self
         propertiesTableView.translatesAutoresizingMaskIntoConstraints = false
-        propertiesTableView.register(PropertyViewCell.self, forCellReuseIdentifier: EDIT_PROFILE_PROPERTY_CELL)
+        propertiesTableView.register(PropertyViewCell.self, forCellReuseIdentifier: editProfilePropertyCellId)
         view.addSubview(propertiesTableView)
 
         propertiesTableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
@@ -138,7 +138,7 @@ extension EditProfileViewController: UITableViewDataSource, UITableViewDelegate 
     // MARK: - Events
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: EDIT_PROFILE_PROPERTY_CELL) as! PropertyViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: editProfilePropertyCellId) as! PropertyViewCell
 
         showPropertyCell(cell: cell, index: indexPath.row)
 

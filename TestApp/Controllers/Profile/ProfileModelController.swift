@@ -32,11 +32,12 @@ class ProfileModelController: EditProfileModelControllerDelegate {
         queue.async {
             do {
                 let decoder = JSONDecoder()
-                if let profileJson = UserDefaults.standard.string(forKey: self.profile.KEY)?.utf8 {
+                if let profileJson = UserDefaults.standard.string(forKey: self.profile.userDefaultsKey)?.utf8 {
                     let data = Data(profileJson)
                     self.profile = try decoder.decode(Profile.self, from: data)
                     self.properties = self.makeProperties(self.profile)
                 }
+
             } catch {
                 print("Error: loadProfileAsync()")
             }

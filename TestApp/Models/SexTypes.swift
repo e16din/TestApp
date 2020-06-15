@@ -6,6 +6,7 @@
 import Foundation
 
 class SexTypes {
+
     let sexTypes = [
         0: "Не выбран",
         1: "Мужской",

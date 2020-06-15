@@ -31,7 +31,7 @@ class PropertyViewCell: UITableViewCell {
         }
     }
 
-    let DEFAULT_WIDTH = UIScreen.main.bounds.width / 2
+    let defaultCellWidth = UIScreen.main.bounds.width / 2
 
     var delegate: PropertyViewCellDelegate?
 
@@ -69,7 +69,7 @@ class PropertyViewCell: UITableViewCell {
     // MARK: - Actions
 
     func showPropertyView() {
-        let frame = CGRect(x: DEFAULT_WIDTH - 16, y: 8, width: DEFAULT_WIDTH, height: 40)
+        let frame = CGRect(x: defaultCellWidth - 16, y: 8, width: defaultCellWidth, height: 40)
         propertyFieldView = UITextView(frame: frame)
         propertyFieldView.delegate = self
         propertyFieldView.translatesAutoresizingMaskIntoConstraints = true
@@ -148,8 +148,8 @@ class PropertyViewCell: UITableViewCell {
         if startHeight + delta < calcHeight || startHeight - delta > calcHeight {
             UIView.setAnimationsEnabled(false)
             propertyFieldView.sizeToFit()
-            if propertyFieldView.frame.size.width < DEFAULT_WIDTH {
-                propertyFieldView.frame.size.width = DEFAULT_WIDTH
+            if propertyFieldView.frame.size.width < defaultCellWidth {
+                propertyFieldView.frame.size.width = defaultCellWidth
             }
 
             delegate?.updatePropertyCellHeight(self)
