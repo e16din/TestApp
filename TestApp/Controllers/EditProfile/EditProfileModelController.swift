@@ -13,10 +13,10 @@ class EditProfileModelController {
 
     var profile: Profile
 
-    var properties: [PropertyViewCell.Property]!
-    var originProperties: [PropertyViewCell.Property]!
-
     weak var delegate: EditProfileModelControllerDelegate?
+
+    private var properties: [PropertyViewCell.Property]!
+    private var originProperties: [PropertyViewCell.Property]!
 
     // MARK: - Events
 

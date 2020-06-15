@@ -10,7 +10,7 @@ class ProfileModelController: EditProfileModelControllerDelegate {
 
     var profile: Profile
 
-    var properties: [PropertyViewCell.Property]!
+    private var properties: [PropertyViewCell.Property]!
 
     // MARK: - Events
 
