@@ -31,21 +31,22 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        do {
-            try profileModelController.loadProfile()
-        } catch {
-            print("Error: loadProfile()")
-        }
-
         showView()
         showNavigationBar()
         showProfilePropertiesTable()
+
+        profileModelController.loadProfileAsync {
+            self.profileModelController.isProfileLoaded = true
+            self.reloadProfilePropertiesTable()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        updateProfilePropertiesTable()
+        if profileModelController.isProfileLoaded {
+            reloadProfilePropertiesTable()
+        }
     }
 
     @objc func editNavButtonPressed() {
@@ -88,7 +89,7 @@ class ProfileViewController: UIViewController {
         propertiesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
-    func updateProfilePropertiesTable() {
+    func reloadProfilePropertiesTable() {
         propertiesTableView.reloadData()
     }
 }

@@ -9,6 +9,7 @@ import Foundation
 class ProfileModelController: EditProfileModelControllerDelegate {
 
     var profile: Profile
+    var isProfileLoaded = false
 
     private var properties: [PropertyViewCell.Property]!
 
@@ -20,18 +21,29 @@ class ProfileModelController: EditProfileModelControllerDelegate {
     }
 
     func profileSaved(_ newProfile: Profile) {
-        profile = newProfile
+        self.profile = newProfile
         properties = makeProperties(profile)
     }
 
     // MARK: - Actions
 
-    func loadProfile() throws {
-        let decoder = JSONDecoder()
-        if let profileJson = UserDefaults.standard.string(forKey: profile.KEY)?.utf8 {
-            let data = Data(profileJson)
-            profile = try decoder.decode(Profile.self, from: data)
-            properties = makeProperties(profile)
+    func loadProfileAsync(_ actionDone: (() -> Void)?) {
+        let queue = DispatchQueue.global(qos: .userInitiated)
+        queue.async {
+            do {
+                let decoder = JSONDecoder()
+                if let profileJson = UserDefaults.standard.string(forKey: self.profile.KEY)?.utf8 {
+                    let data = Data(profileJson)
+                    self.profile = try decoder.decode(Profile.self, from: data)
+                    self.properties = self.makeProperties(self.profile)
+                }
+            } catch {
+                print("Error: loadProfileAsync()")
+            }
+
+            DispatchQueue.main.async {
+                actionDone?()
+            }
         }
     }
 

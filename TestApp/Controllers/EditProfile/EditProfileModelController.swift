@@ -6,6 +6,7 @@
 import Foundation
 
 protocol EditProfileModelControllerDelegate: class {
+    // MARK: - Events
     func profileSaved(_ profile: Profile)
 }
 
