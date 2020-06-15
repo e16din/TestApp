@@ -16,13 +16,11 @@ protocol PropertyViewCellDelegate {
 class PropertyViewCell: UITableViewCell {
 
     struct Property {
-        let type: Profile.PropertyType
-
-        let name: String
-        var value: String
-
-        let isSingleLine: Bool
-        let isClickable: Bool
+        var type: Profile.PropertyType
+        var name = ""
+        var value = ""
+        var isSingleLine = true
+        var isClickable = false
 
         init(_ type: Profile.PropertyType, name: String, value: String, isSingleLine: Bool, isClickable: Bool) {
             self.type = type
