@@ -13,17 +13,13 @@
 		710832C4FD3AAFBB8A87387C /* ProfileModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7108353E32BB3581EEF8C47A /* ProfileModelController.swift */; };
 		710832EDA40A1A459C705D50 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083A83D7A826388B21A411 /* ProfileViewController.swift */; };
 		71083301E40F8D2BF647C92B /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710839CBE2BE953F67A7155D /* EditProfileViewController.swift */; };
-		710833713F8FC4FE4D2D6258 /* PrefactoringRefactoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710832B37E3BD62D5DFF400E /* PrefactoringRefactoring.swift */; };
 		710835308F872BB80E7481D2 /* PropertyViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083BD5FD62E1E2B2883255 /* PropertyViewCell.swift */; };
-		710837CFDA16AE159E07FEF8 /* PrefactoringUserPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083B09B1BE72A8ED75674A /* PrefactoringUserPhoto.swift */; };
 		710837F7D5597331AC333B9A /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083BAA14478EF14280A664 /* Profile.swift */; };
 		710838AB245241CDEA558695 /* AddOutsideStubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083DF9301D439E28891F79 /* AddOutsideStubView.swift */; };
 		710839ABB9AA87CE07C38397 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083B2B94C1662E326CDAE6 /* Dictionary.swift */; };
 		710839EBE0C4EF50E4758AE9 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083A56130C84C05EF6630D /* Date.swift */; };
 		710839EFD4F0420F4FC93A4A /* SexTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710834D226EB4EFDFF8010B3 /* SexTypes.swift */; };
-		71083A4FBBC1F9CF33E23383 /* PrefactoringEditProfileOnBackClick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7108367545A88851DEE8FCAD /* PrefactoringEditProfileOnBackClick.swift */; };
 		71083B6432140D44C8F41FBA /* ItemPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083338BBCECF434A3E4081 /* ItemPickerView.swift */; };
-		71083C57BE27C56AA7D0ADA0 /* PrefactoringEditProfileOnSaveClick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71083AD20E76503428676DEA /* PrefactoringEditProfileOnSaveClick.swift */; };
 		71083E3CE8092CA9A0B73DAE /* EditProfileModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710835A7EC2553155F6A48B1 /* EditProfileModelController.swift */; };
 		75195C182422419E00BF8E6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75195C172422419E00BF8E6F /* Assets.xcassets */; };
 		75195C23242243EB00BF8E6F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75195C0E2422419C00BF8E6F /* AppDelegate.swift */; };
@@ -34,19 +30,15 @@
 /* Begin PBXFileReference section */
 		2495F16CDEDD669D6A39BABA /* Pods-TestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.release.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.release.xcconfig"; sourceTree = "<group>"; };
 		58184AEF9CA5E31CAC22DC0B /* Pods-TestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.debug.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.debug.xcconfig"; sourceTree = "<group>"; };
-		710832B37E3BD62D5DFF400E /* PrefactoringRefactoring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefactoringRefactoring.swift; sourceTree = "<group>"; };
 		71083338BBCECF434A3E4081 /* ItemPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemPickerView.swift; sourceTree = "<group>"; };
 		710834D226EB4EFDFF8010B3 /* SexTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SexTypes.swift; sourceTree = "<group>"; };
 		7108353E32BB3581EEF8C47A /* ProfileModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileModelController.swift; sourceTree = "<group>"; };
 		710835A7EC2553155F6A48B1 /* EditProfileModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileModelController.swift; sourceTree = "<group>"; };
-		7108367545A88851DEE8FCAD /* PrefactoringEditProfileOnBackClick.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefactoringEditProfileOnBackClick.swift; sourceTree = "<group>"; };
 		710839CBE2BE953F67A7155D /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		71083A0640A89995DCE859E3 /* AddSelectCancelToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSelectCancelToolbar.swift; sourceTree = "<group>"; };
 		71083A3DCA435294D5937C21 /* Templates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Templates.swift; sourceTree = "<group>"; };
 		71083A56130C84C05EF6630D /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		71083A83D7A826388B21A411 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		71083AD20E76503428676DEA /* PrefactoringEditProfileOnSaveClick.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefactoringEditProfileOnSaveClick.swift; sourceTree = "<group>"; };
-		71083B09B1BE72A8ED75674A /* PrefactoringUserPhoto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefactoringUserPhoto.swift; sourceTree = "<group>"; };
 		71083B2B94C1662E326CDAE6 /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		71083BAA14478EF14280A664 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		71083BD5FD62E1E2B2883255 /* PropertyViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyViewCell.swift; sourceTree = "<group>"; };
@@ -116,17 +108,6 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		7108370268A017B1D0F286F3 /* Prefactoring */ = {
-			isa = PBXGroup;
-			children = (
-				7108367545A88851DEE8FCAD /* PrefactoringEditProfileOnBackClick.swift */,
-				71083AD20E76503428676DEA /* PrefactoringEditProfileOnSaveClick.swift */,
-				71083B09B1BE72A8ED75674A /* PrefactoringUserPhoto.swift */,
-				710832B37E3BD62D5DFF400E /* PrefactoringRefactoring.swift */,
-			);
-			path = Prefactoring;
-			sourceTree = "<group>";
-		};
 		71083DAF92F0822F9BDF2877 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -185,7 +166,6 @@
 				75195C1C2422419E00BF8E6F /* Info.plist */,
 				71083DAF92F0822F9BDF2877 /* Controllers */,
 				710836A034E924BFF3255DF3 /* Extensions */,
-				7108370268A017B1D0F286F3 /* Prefactoring */,
 				710831F5F6F9197477B9AF02 /* Support */,
 				71083F33C606B1D46890D76E /* Views */,
 				710835210CCB80E621F7B0CB /* Models */,
@@ -317,11 +297,7 @@
 			files = (
 				75195C23242243EB00BF8E6F /* AppDelegate.swift in Sources */,
 				710832EDA40A1A459C705D50 /* ProfileViewController.swift in Sources */,
-				71083A4FBBC1F9CF33E23383 /* PrefactoringEditProfileOnBackClick.swift in Sources */,
-				71083C57BE27C56AA7D0ADA0 /* PrefactoringEditProfileOnSaveClick.swift in Sources */,
-				710837CFDA16AE159E07FEF8 /* PrefactoringUserPhoto.swift in Sources */,
 				710839EBE0C4EF50E4758AE9 /* Date.swift in Sources */,
-				710833713F8FC4FE4D2D6258 /* PrefactoringRefactoring.swift in Sources */,
 				7108301FD7E5B80BB50313CF /* Templates.swift in Sources */,
 				710832C4FD3AAFBB8A87387C /* ProfileModelController.swift in Sources */,
 				71083E3CE8092CA9A0B73DAE /* EditProfileModelController.swift in Sources */,
