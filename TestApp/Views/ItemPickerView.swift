@@ -14,7 +14,7 @@ import UIKit
     func cancelItemPicker()
 }
 
-class ItemPickerView: UIView, SelectCancelToolbarDelegate, OutsideStubViewDelegate {
+class ItemPickerView: UIView {
 
     var items: [Int: String]!
 
@@ -40,23 +40,6 @@ class ItemPickerView: UIView, SelectCancelToolbarDelegate, OutsideStubViewDelega
 
     required init(coder: NSCoder) {
         fatalError("Error: NSCoder is not supported")
-    }
-
-    // NOTE: to send 'index'
-    @objc func itemSelected() {
-        delegate?.itemSelected(self, index: pickerView.selectedRow(inComponent: 0))
-    }
-
-    func toolbarSelectButtonPressed() {
-        delegate?.itemSelected(self, index: selectedRow)
-    }
-
-    func toolbarCancelButtonPressed() {
-        delegate?.cancelItemPicker()
-    }
-
-    func outsideStubPressed() {
-        delegate?.cancelItemPicker()
     }
 
     // MARK: - Actions
@@ -109,4 +92,24 @@ extension ItemPickerView: UIPickerViewDataSource, UIPickerViewDelegate {
         selectedRow = row
         delegate?.itemChanged(self, index: row)
     }
+}
+
+// MARK: - SelectCancelToolbarDelegate, OutsideStubViewDelegate
+extension ItemPickerView: SelectCancelToolbarDelegate,
+    OutsideStubViewDelegate {
+
+    // MARK: - Events
+
+    func toolbarSelectButtonPressed() {
+        delegate?.itemSelected(self, index: selectedRow)
+    }
+
+    func toolbarCancelButtonPressed() {
+        delegate?.cancelItemPicker()
+    }
+
+    func outsideStubPressed() {
+        delegate?.cancelItemPicker()
+    }
+
 }

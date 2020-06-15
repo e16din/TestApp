@@ -6,14 +6,14 @@
 import UIKit
 
 protocol PropertyViewCellDelegate {
-    // Events
+    // MARK: - Events
     func propertyTextChanged(_ cell: PropertyViewCell, text: String, rowIndex: Int)
 
-    // Actions
+    // MARK: - Actions
     func updatePropertyCellHeight(_ cell: PropertyViewCell)
 }
 
-class PropertyViewCell: UITableViewCell, UITextViewDelegate {
+class PropertyViewCell: UITableViewCell {
 
     struct Property {
         var type: Profile.PropertyType
@@ -46,7 +46,7 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
     var propertyFieldView: UITextView!
 
 
-    // Events
+    // MARK: - Events
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
@@ -66,15 +66,7 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
         }
     }
 
-    public func textViewDidChange(_ textView: UITextView) {
-        if !isSingleLine {
-            updateCellHeight()
-        }
-
-        delegate?.propertyTextChanged(self, text: textView.text, rowIndex: rowIndex)
-    }
-
-    // Actions
+    // MARK: - Actions
 
     func showPropertyView() {
         let frame = CGRect(x: DEFAULT_WIDTH - 16, y: 8, width: DEFAULT_WIDTH, height: 40)
@@ -165,4 +157,18 @@ class PropertyViewCell: UITableViewCell, UITextViewDelegate {
             UIView.setAnimationsEnabled(true)
         }
     }
+}
+
+extension PropertyViewCell: UITextViewDelegate {
+
+    // MARK: - Events
+
+    public func textViewDidChange(_ textView: UITextView) {
+        if !isSingleLine {
+            updateCellHeight()
+        }
+
+        delegate?.propertyTextChanged(self, text: textView.text, rowIndex: rowIndex)
+    }
+
 }

@@ -14,9 +14,7 @@ import UIKit
     func cancelDatePicker()
 }
 
-class DatePickerView: UIView,
-    SelectCancelToolbarDelegate,
-    OutsideStubViewDelegate {
+class DatePickerView: UIView {
 
     var delegate: DatePickerDelegate?
 
@@ -36,22 +34,6 @@ class DatePickerView: UIView,
 
     required init(coder: NSCoder) {
         fatalError("Error: NSCoder is not supported")
-    }
-
-    @objc func pickerDateChanged() {
-        delegate?.dateChanged(self, date: datePicker.date)
-    }
-
-    func toolbarSelectButtonPressed() {
-        delegate?.dateSelected(self, selectedDate: datePicker.date)
-    }
-
-    func toolbarCancelButtonPressed() {
-        delegate?.cancelDatePicker()
-    }
-
-    func outsideStubPressed() {
-        delegate?.cancelDatePicker()
     }
 
     // MARK: - Actions
@@ -82,5 +64,28 @@ class DatePickerView: UIView,
     func showOutsideStubView() {
         outsideStubView = AddOutsideStubView()
             .addTo(self, bottomView: toolBar, delegate: self)
+    }
+}
+
+// MARK: - SelectCancelToolbarDelegate, OutsideStubViewDelegate
+extension DatePickerView: SelectCancelToolbarDelegate,
+    OutsideStubViewDelegate {
+
+    // MARK: - Events
+
+    @objc func pickerDateChanged() {
+        delegate?.dateChanged(self, date: datePicker.date)
+    }
+
+    func toolbarSelectButtonPressed() {
+        delegate?.dateSelected(self, selectedDate: datePicker.date)
+    }
+
+    func toolbarCancelButtonPressed() {
+        delegate?.cancelDatePicker()
+    }
+
+    func outsideStubPressed() {
+        delegate?.cancelDatePicker()
     }
 }
