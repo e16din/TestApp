@@ -39,6 +39,7 @@ class EditProfileViewController: UIViewController {
         showView()
         showNavigationBar()
         showProfilePropertiesTable()
+        print("commit from andrey-svx")
     }
 
     @objc func saveNavButtonPressed() {
